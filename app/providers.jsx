@@ -1,8 +1,5 @@
-// app/providers.jsx
 "use client";
 
-import { ClerkProvider } from "@clerk/nextjs";
-
 export function Providers({ children }) {
-  return <ClerkProvider>{children}</ClerkProvider>;
+  return <>{children}</>; // 일단 아무것도 안 감싸고 그대로 렌더링
 }

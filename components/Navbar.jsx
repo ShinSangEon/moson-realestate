@@ -44,7 +44,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="로고" width={36} height={36} />
+          <Image src="/logo.jpg" alt="로고" width={36} height={36} />
           <span className="text-xl sm:text-2xl font-bold tracking-tight whitespace-nowrap">
             <span className="text-green-600">모르면</span>
             <span className="text-emerald-500">손해</span>

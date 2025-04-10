@@ -1,7 +1,7 @@
 // app/layout.js
 import "./globals.css";
 import { Providers } from "./providers";
-import Navbar from "./components/Navbar";
+import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
 export const metadata = {
   title: "모손 부동산",

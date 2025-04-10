@@ -77,7 +77,7 @@ export default function LoginPage() {
           </a>
 
           <a
-            href={GOOGLE_AUTH_URL}
+            href="/api/auth/google"
             className="flex items-center justify-center gap-2 w-full py-2 rounded bg-white border hover:bg-gray-100 transition"
           >
             <Image src="/google.png" alt="google" width={20} height={20} />
