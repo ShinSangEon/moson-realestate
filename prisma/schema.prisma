@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model CCTV {
+  id               Int      @id @default(autoincrement())
+  address          String
+  purpose          String
+  cameraCount      Int
+  resolution       String
+  direction        String
+  storageDays      Int
+  installationDate DateTime
+  contactNumber    String
+  latitude         Float
+  longitude        Float
+  dataUpdatedAt    DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Apartment_Details {
+  id                  Int      @id @default(autoincrement())
+  address             String // 주소
+  complexType         String // 단지종류
+  complexNamePublic   String? // 단지명_공시가격
+  complexNameBuilding String? // 단지명_건축물대장
+  complexNameRoad     String? // 단지명_도로명주소
+  complexUniqueId     String // 단지고유번호
+  buildingCount       Int // 동수
+  landUniqueId        String // 필지고유번호
+  householdCount      Int // 세대수
+  approvalDate        DateTime // 사용승인일
+  buildingName        String? // 동명_건축물대장
+  floorCount          Int // 지상층수
+  latitude            Float // 위도
+  longitude           Float // 경도
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Apartment_Marker {
+  id        Int   @id @default(autoincrement())
+  complexUniqueId     String // 단지고유번호
+  latitude  Float
+  longitude Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}

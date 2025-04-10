@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: real_estate
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - nextjs_network
+
+  redis:
+    image: redis:alpine
+    container_name: redis_cache_new
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - nextjs_network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  nextjs_network:
