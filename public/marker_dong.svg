@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 원 -->
+  <circle cx="25" cy="25" r="24" fill="#3388FF" fill-opacity="0.9"/>
+  <circle cx="25" cy="25" r="23" stroke="white" stroke-width="2"/>
+  
+  <!-- 동 아이콘 -->
+  <path d="M15 35V20L25 12L35 20V35" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 35V25H30V35" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M15 35H35" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- 그림자 효과 -->
+  <circle cx="25" cy="25" r="24" fill="black" fill-opacity="0.1" transform="translate(2 2)"/>
+</svg> 

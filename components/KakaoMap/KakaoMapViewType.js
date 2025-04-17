@@ -1,193 +1,304 @@
-import React, { useEffect, useState, useRef } from "react";
-import { getApartmentMarkers } from "@/app/library/fetchApartMarker";
-import { toast } from "sonner";
+"use client";
 
-const KakaoMapViewType = ({ map, scriptLoad, markerType, onMarkerTypeChange }) => {
-  const [apartments, setApartments] = useState([]);
-  const [loading, setLoading] = useState(false);
+import React, { useEffect, useState, useRef } from "react";
+import { toast } from "sonner";
+import {
+  Map,
+  MapMarker,
+  MapTypeControl,
+  ZoomControl,
+} from "react-kakao-maps-sdk";
+import { motion } from "framer-motion";
+
+const KakaoMapViewType = ({
+  map,
+  scriptLoad,
+  markerType,
+  onMarkerTypeChange,
+  zoomLevel: initialZoomLevel,
+  apartments,
+  isLoading,
+}) => {
+  const [currentZoomLevel, setCurrentZoomLevel] = useState(
+    initialZoomLevel || 3
+  );
+  const [apartmentList, setApartmentList] = useState([]);
+  const [isDataLoading, setIsDataLoading] = useState(false);
   const [apartmentClusterer, setApartmentClusterer] = useState(null);
   const apartmentMarkersRef = useRef([]);
   const infoWindowRef = useRef(null);
+  const [selectedDong, setSelectedDong] = useState("");
+  const [dongs, setDongs] = useState([]);
+  const [dongBoundary, setDongBoundary] = useState(null);
+  const polygons = useRef([]);
+  const overlays = useRef([]);
+  const [dongOverlays, setDongOverlays] = useState({});
+  const [currentPolygon, setCurrentPolygon] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const mapRef = useRef(null);
+
+  // 행정동별 아파트 그룹화
+  const groupApartmentsByDong = (apts) => {
+    if (!Array.isArray(apts)) {
+      console.error("Invalid apartments data:", apts);
+      return {};
+    }
+
+    const groups = {};
+    apts.forEach((apt) => {
+      let dong = "기타";
+
+      // 주소에서 동 추출 시도
+      if (apt.details?.address) {
+        const dongMatch = apt.details.address.match(/([가-힣]+동)/);
+        if (dongMatch) {
+          dong = dongMatch[1];
+        }
+      }
+
+      if (!groups[dong]) {
+        groups[dong] = [];
+      }
+      groups[dong].push(apt);
+    });
+
+    return groups;
+  };
+
+  useEffect(() => {
+    async function fetchDongs() {
+      try {
+        const res = await fetch("/api/apt/dongs");
+        const data = await res.json();
+        setDongs(data);
+      } catch (err) {
+        console.error("동 목록 로딩 오류:", err);
+      }
+    }
+    fetchDongs();
+  }, []);
+
+  const fetchDongBoundary = async () => {
+    try {
+      const res = await fetch("/api/dongData", { cache: "no-store" });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      setDongBoundary(data);
+    } catch (err) {
+      console.error("행정동 경계 데이터 불러오기 실패:", err);
+      toast.error("행정동 경계 데이터를 불러오지 못했습니다");
+    }
+  };
 
   useEffect(() => {
     async function fetchApartments() {
       try {
-        setLoading(true);
-        const data = await getApartmentMarkers();
-        setApartments(data);
-        toast.success('아파트 데이터를 성공적으로 로드했습니다', { duration: 1000 });
+        setIsDataLoading(true);
+        const res = await fetch("/api/apartmentMarker");
+        const data = await res.json();
+        console.log("아파트 데이터:", data);
+        setApartmentList(data);
+        toast.success("아파트 데이터를 성공적으로 로드했습니다", {
+          duration: 1000,
+        });
       } catch (err) {
-        console.error('아파트 데이터 로딩 오류:', err);
-        toast.error(err.message || '아파트 데이터를 불러오지 못했습니다', { duration: 1000 });
+        console.error("아파트 데이터 로딩 오류:", err);
+        toast.error(err.message || "아파트 데이터를 불러오지 못했습니다", {
+          duration: 1000,
+        });
       } finally {
-        setLoading(false);
+        setIsDataLoading(false);
       }
     }
 
-    fetchApartments();
+    if (map && window.kakao && window.kakao.maps) {
+      fetchDongBoundary();
+      fetchApartments();
+    }
+  }, [map]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // 이미 로드된 스크립트 확인
+    const existingScript = document.querySelector(
+      "script[src*='dapi.kakao.com']"
+    );
+    if (existingScript) {
+      if (window.kakao?.maps) {
+        return;
+      }
+      existingScript.remove();
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`;
+    script.async = true;
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        // 클러스터러 초기화
+        if (mapRef.current) {
+          const newClusterer = new window.kakao.maps.MarkerClusterer({
+            map: mapRef.current,
+            averageCenter: true,
+            minLevel: 3,
+          });
+          setApartmentClusterer(newClusterer);
+        }
+      });
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, []);
 
   useEffect(() => {
-    if (!map || loading || apartments.length === 0 || !window.kakao || !window.kakao.maps) return;
-    
-    if (!infoWindowRef.current && window.kakao && window.kakao.maps) {
-      infoWindowRef.current = new window.kakao.maps.InfoWindow({
-        content: '',
-        removable: false
-      });
-    }
-    
-    if (markerType === "apartment") {
-      let cancelled = false;
-      
-      const createApartmentMarkers = async () => {
-        const markers = [];
-        const batchSize = 50; 
-        
-        const clustererStyles = [
-          {
-            width: '60px', height: '60px',
-            background: 'rgba(0, 128, 76, 0.8)',
-            color: '#fff',
-            borderRadius: '50%',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            lineHeight: '20px',
-            padding: '10px 0',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)'
-          },
-          {
-            width: '70px', height: '70px',
-            background: 'rgba(0, 128, 76, 0.9)',
-            color: '#fff',
-            borderRadius: '50%',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            lineHeight: '22px',
-            padding: '13px 0',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)'
-          },
-          {
-            width: '80px', height: '80px',
-            background: 'rgba(0, 128, 76, 1)',
-            color: '#fff',
-            borderRadius: '50%',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            lineHeight: '24px',
-            padding: '16px 0',
-            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)'
-          }
-        ];
-        
-        const newClusterer = new window.kakao.maps.MarkerClusterer({
-          map: map,
-          averageCenter: true,
-          minLevel: 3,
-          minClusterSize: 3,
-          gridSize: 120,
-          disableClickZoom: false,
-          styles: clustererStyles,
-          calculator: [10, 30, 100],
-          texts: (count) => `아파트<br/>${count}개`
+    if (!mapRef.current || !apartmentClusterer) return;
+
+    const createApartmentMarkers = () => {
+      if (!apartmentList || apartmentList.length === 0) return;
+
+      const newMarkers = apartmentList.map((apartment) => {
+        const marker = new window.kakao.maps.Marker({
+          position: new window.kakao.maps.LatLng(
+            apartment.latitude,
+            apartment.longitude
+          ),
+          title: apartment.apartmentName,
         });
-        
-        for (let i = 0; i < apartments.length; i += batchSize) {
-          if (cancelled) return;
-          
-          const batch = apartments.slice(i, i + batchSize);
-          const batchMarkers = batch.map(apartment => {
-            if (!apartment.latitude || !apartment.longitude) return null;
-            
-            const position = new window.kakao.maps.LatLng(apartment.latitude, apartment.longitude);
-            const marker = new window.kakao.maps.Marker({
-              position: position,
-              clickable: true
-            });
-            
-            window.kakao.maps.event.addListener(marker, 'mouseover', function() {
-              const infoContent = `
-                <div style="padding:5px;width:200px;">
-                  <strong>${apartment.complexName || apartment.complexUniqueId}</strong><br/>
-                  위치: ${apartment.latitude}, ${apartment.longitude}
-                </div>
-              `;
-              
-              infoWindowRef.current.setContent(infoContent);
-              infoWindowRef.current.open(map, marker);
-            });
-            
-            window.kakao.maps.event.addListener(marker, 'mouseout', function() {
-              infoWindowRef.current.close();
-            });
-            
-            return marker;
-          }).filter(Boolean);
-          
-          markers.push(...batchMarkers);
-          
-          if (batchMarkers.length > 0) {
-            newClusterer.addMarkers(batchMarkers);
-          }
-          
-          await new Promise(resolve => setTimeout(resolve, 0));
-        }
-        
-        if (!cancelled) {
-          setApartmentClusterer(newClusterer);
-          apartmentMarkersRef.current = markers;
-          toast.success(`아파트 마커 ${markers.length}개 표시 완료`, { duration: 1000 });
-        }
-      };
-      
-      createApartmentMarkers();
-      
-      return () => {
-        cancelled = true;
-        if (apartmentClusterer) {
-          setTimeout(() => {
-            apartmentClusterer.clear();
-            apartmentMarkersRef.current = [];
-            if (infoWindowRef.current) {
-              infoWindowRef.current.close();
-            }
-            
-            toast.info('아파트 마커를 제거했습니다', { duration: 1000 });
-          }, 0);
-        }
-      };
-    } else {
+
+        const content = `
+          <div class="p-2 text-sm">
+            <p class="font-bold">${apartment.apartmentName}</p>
+            <p class="text-gray-600">${apartment.dong}</p>
+            <p class="text-xs text-gray-500">${apartment.roadAddress}</p>
+          </div>
+        `;
+
+        const infoWindow = new window.kakao.maps.InfoWindow({
+          content: content,
+        });
+
+        window.kakao.maps.event.addListener(marker, "click", () => {
+          infoWindow.open(mapRef.current, marker);
+        });
+
+        return marker;
+      });
+
+      setMarkers(newMarkers);
+      apartmentClusterer.addMarkers(newMarkers);
+    };
+
+    createApartmentMarkers();
+
+    return () => {
       if (apartmentClusterer) {
-        setTimeout(() => {
-          apartmentClusterer.clear();
-          apartmentMarkersRef.current = [];
-          if (infoWindowRef.current) {
-            infoWindowRef.current.close();
-          }
-          
-          // Remove all custom overlays
-          document.querySelectorAll('.custom-marker').forEach(el => {
-            if (el.parentNode) {
-              el.parentNode.removeChild(el);
-            }
+        apartmentClusterer.clear();
+      }
+    };
+  }, [apartmentList, apartmentClusterer]);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const zoomChangedHandler = () => {
+      const level = mapRef.current.getZoom();
+      setCurrentZoomLevel(level);
+    };
+
+    window.kakao.maps.event.addListener(
+      mapRef.current,
+      "zoom_changed",
+      zoomChangedHandler
+    );
+
+    return () => {
+      if (mapRef.current) {
+        window.kakao.maps.event.removeListener(
+          mapRef.current,
+          "zoom_changed",
+          zoomChangedHandler
+        );
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mapRef.current || !apartmentClusterer) return;
+
+    if (currentZoomLevel >= 5) {
+      // 줌 레벨이 5 이상일 때는 행정구역 오버레이 표시
+      apartmentClusterer.clear();
+      setMarkers([]);
+    } else {
+      // 줌 레벨이 5 미만일 때는 개별 마커 표시
+      if (apartmentList && apartmentList.length > 0) {
+        const newMarkers = apartmentList.map((apartment) => {
+          const marker = new window.kakao.maps.Marker({
+            position: new window.kakao.maps.LatLng(
+              apartment.latitude,
+              apartment.longitude
+            ),
+            title: apartment.apartmentName,
           });
-          
-          toast.info('아파트 마커를 제거했습니다', { duration: 1000 });
-        }, 0);
+
+          const content = `
+            <div class="p-2 text-sm">
+              <p class="font-bold">${apartment.apartmentName}</p>
+              <p class="text-gray-600">${apartment.dong}</p>
+              <p class="text-xs text-gray-500">${apartment.roadAddress}</p>
+            </div>
+          `;
+
+          const infoWindow = new window.kakao.maps.InfoWindow({
+            content: content,
+          });
+
+          window.kakao.maps.event.addListener(marker, "click", () => {
+            infoWindow.open(mapRef.current, marker);
+          });
+
+          return marker;
+        });
+
+        setMarkers(newMarkers);
+        apartmentClusterer.addMarkers(newMarkers);
       }
     }
-  }, [map, apartments, loading, markerType, scriptLoad]);
+  }, [currentZoomLevel, apartmentList, apartmentClusterer]);
+
+  if (isLoading || isDataLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="absolute top-20 left-4 md:left-10 z-9999 bg-white border-2 border-gray-300 rounded-lg shadow-lg p-2">
-      <select 
-        className="p-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={markerType}
-        onChange={(e) => onMarkerTypeChange(e.target.value)}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="relative h-full"
+    >
+      <Map
+        center={{ lat: 35.1796, lng: 128.1076 }}
+        style={{ width: "100%", height: "100%" }}
+        level={3}
+        ref={mapRef}
       >
-        <option value="apartment">아파트</option>
-      </select>
-    </div>
+        <MapTypeControl position={window.kakao.maps.ControlPosition.TOPRIGHT} />
+        <ZoomControl position={window.kakao.maps.ControlPosition.RIGHT} />
+      </Map>
+    </motion.div>
   );
 };
 
