@@ -5,10 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
-export default function Navbar() {
+export default function NavbarClient({ isLoggedIn: initialIsLoggedIn }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn);
+  const pathname = usePathname();
 
   const menuItems = [
     { href: "/", label: "홈" },
@@ -19,17 +21,19 @@ export default function Navbar() {
     { href: "/guide", label: "모르면손해 사용법" },
   ];
 
+  // 페이지 이동 시 로그인 상태 확인
   useEffect(() => {
-    const checkLogin = async () => {
+    const checkLoginStatus = async () => {
       try {
         const res = await fetch("/api/auth/me");
-        if (res.ok) setIsLoggedIn(true);
+        setIsLoggedIn(res.ok);
       } catch (err) {
         setIsLoggedIn(false);
       }
     };
-    checkLogin();
-  }, []);
+
+    checkLoginStatus();
+  }, [pathname]); // pathname이 변경될 때만 실행
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });

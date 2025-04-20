@@ -1,7 +1,7 @@
 // app/layout.js
 import "./globals.css";
 import { Providers } from "./providers";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/app/components/Navbar";
 import { Toaster } from "sonner";
 import { Inter } from "next/font/google";
 

@@ -1,8 +1,8 @@
-// next.config.js
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 설정 추가 가능
+  images: {
+    domains: ["moson1.s3.ap-northeast-2.amazonaws.com"],
+  },
 };
 
 module.exports = nextConfig;

@@ -77,6 +77,8 @@ model User {
   comments      Comment[]
   notifications Notification[] // ✅ 이 줄을 추가!
   agent         Agent?     // 공인중개사 정보 (role이 "agent"인 경우)
+  
+  nickname       String?   // 🔜 닉네임도 같이 쓸 거니까 미리 넣어도 좋아
 }
 
 model Agent {
