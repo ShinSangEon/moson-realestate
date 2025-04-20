@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { getAuthUserId } from "@/lib/auth";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const userId = getAuthUserId(); // ❌ await 쓰면 안돼!
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: "로그인이 필요합니다." },
-      { status: 401 }
-    );
-  }
-
   try {
+    const userId = await getAuthUserId();
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, message: "로그인이 필요합니다." },
+        { status: 401 }
+      );
+    }
+
     const favorites = await prisma.favorite.findMany({
       where: { userId },
       include: {
@@ -23,9 +21,12 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ favorites });
-  } catch (err) {
-    console.error("찜 목록 조회 실패:", err);
-    return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
+    return NextResponse.json({ success: true, favorites });
+  } catch (error) {
+    console.error("찜 목록 조회 실패:", error);
+    return NextResponse.json(
+      { success: false, message: "찜 목록을 불러오는데 실패했습니다." },
+      { status: 500 }
+    );
   }
 }

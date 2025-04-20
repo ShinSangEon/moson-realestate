@@ -1,31 +1,34 @@
-import { NextResponse } from 'next/server';
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
+import { NextResponse } from "next/server";
+import axios from "axios";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 const client_id = process.env.GOOGLE_CLIENT_ID;
 const client_secret = process.env.GOOGLE_CLIENT_SECRET;
-const redirect_uri = 'http://localhost:3000/api/auth/google/callback';
+const redirect_uri = "http://localhost:3000/api/auth/google/callback";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const code = searchParams.get('code');
+  const code = searchParams.get("code");
 
-  const tokenRes = await axios.post('https://oauth2.googleapis.com/token', {
+  const tokenRes = await axios.post("https://oauth2.googleapis.com/token", {
     code,
     client_id,
     client_secret,
     redirect_uri,
-    grant_type: 'authorization_code',
+    grant_type: "authorization_code",
   });
 
   const { access_token } = tokenRes.data;
 
-  const userInfoRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
+  const userInfoRes = await axios.get(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
 
   const { sub, name, email, picture } = userInfoRes.data;
 
@@ -33,16 +36,17 @@ export async function GET(req) {
   // 예시: const user = await saveOrFindUser({ sub, name, email, picture });
 
   // JWT 발급
-  const token = jwt.sign(
-    { id: sub, name, email },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
-
-  cookies().set('token', token, {
-    httpOnly: true,
-    path: '/',
+  const token = jwt.sign({ id: sub, name, email }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
   });
 
-  return NextResponse.redirect('http://localhost:3000/mypage');
+  cookies().set("token", token, {
+    httpOnly: true,
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  return NextResponse.redirect("http://localhost:3000/mypage");
 }

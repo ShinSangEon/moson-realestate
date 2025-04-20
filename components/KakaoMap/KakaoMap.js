@@ -1,4 +1,6 @@
 "use client";
+import "rc-slider/assets/index.css";
+import Slider from "rc-slider";
 
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -14,6 +16,14 @@ import {
   MessageSquare,
   Star,
   Shield,
+  Filter,
+  DollarSign,
+  Check,
+  RotateCcw,
+  Building,
+  Search,
+  Calculator,
+  Info,
 } from "lucide-react";
 
 import KakaoMapSettings from "./KakaoMapSettings";
@@ -24,6 +34,144 @@ import KakaoMapViewType from "./KakaoMapViewType";
 import KakaoPolygonOverlay from "./KakaoPolygonOverlay";
 
 const defaultPosition = { lat: 35.1803, lng: 128.1087 };
+
+const PRICE_MIN = 1000000;
+const PRICE_MAX = 1000000000;
+const PRICE_STEP = 1000000;
+
+const DEPOSIT_MIN = 0;
+const DEPOSIT_MAX = 300000000;
+const DEPOSIT_STEP = 1000000;
+
+const MONTHLY_MIN = 0;
+const MONTHLY_MAX = 5000000;
+const MONTHLY_STEP = 10000;
+
+const formatKoreanMoney = (num) => {
+  if (!num || isNaN(num)) return "0원";
+  const eok = Math.floor(num / 100000000);
+  const chun = Math.floor((num % 100000000) / 10000000);
+  const man = Math.floor((num % 10000000) / 10000);
+  let result = "";
+  if (eok > 0) result += `${eok}억 `;
+  if (chun > 0) result += `${chun}천 `;
+  if (eok === 0 && chun === 0 && man > 0) result += `${man}만`;
+  return result.trim();
+};
+
+const PriceRangeSlider = ({ filters, setFilters }) => {
+  const value = [filters.minPrice || PRICE_MIN, filters.maxPrice || PRICE_MAX];
+
+  const handleChange = ([newMin, newMax]) => {
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: newMin,
+      maxPrice: newMax,
+      minPriceDisplay: formatKoreanMoney(newMin),
+      maxPriceDisplay: formatKoreanMoney(newMax),
+    }));
+  };
+
+  return (
+    <div className="mb-6">
+      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+        <DollarSign className="w-4 h-4 text-green-600" />
+        가격 범위 선택
+      </label>
+
+      <div className="mb-3 text-green-700 font-semibold text-sm">
+        {formatKoreanMoney(value[0])} ~ {formatKoreanMoney(value[1])}
+      </div>
+
+      <Slider
+        range
+        min={PRICE_MIN}
+        max={PRICE_MAX}
+        step={PRICE_STEP}
+        value={value}
+        onChange={handleChange}
+        trackStyle={[{ backgroundColor: "#22c55e" }]}
+        handleStyle={[
+          { borderColor: "#22c55e", backgroundColor: "#fff" },
+          { borderColor: "#22c55e", backgroundColor: "#fff" },
+        ]}
+        railStyle={{ backgroundColor: "#d1fae5" }}
+      />
+    </div>
+  );
+};
+
+const DepositRangeSlider = ({ filters, setFilters }) => {
+  const value = filters.deposit || DEPOSIT_MIN;
+
+  const handleChange = (newValue) => {
+    setFilters((prev) => ({
+      ...prev,
+      deposit: newValue,
+      depositDisplay: formatKoreanMoney(newValue),
+    }));
+  };
+
+  return (
+    <div className="mb-6">
+      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+        <DollarSign className="w-4 h-4 text-green-600" />
+        보증금 범위 선택
+      </label>
+
+      <div className="mb-3 text-green-700 font-semibold text-sm">
+        {formatKoreanMoney(value)}
+      </div>
+
+      <Slider
+        min={DEPOSIT_MIN}
+        max={DEPOSIT_MAX}
+        step={DEPOSIT_STEP}
+        value={value}
+        onChange={handleChange}
+        trackStyle={{ backgroundColor: "#22c55e" }}
+        handleStyle={{ borderColor: "#22c55e", backgroundColor: "#fff" }}
+        railStyle={{ backgroundColor: "#d1fae5" }}
+      />
+    </div>
+  );
+};
+
+const MonthlyRentRangeSlider = ({ filters, setFilters }) => {
+  const value = filters.monthlyFee || MONTHLY_MIN;
+
+  const handleChange = (newValue) => {
+    setFilters((prev) => ({
+      ...prev,
+      monthlyFee: newValue,
+      monthlyDisplay: formatKoreanMoney(newValue),
+    }));
+  };
+
+  return (
+    <div className="mb-6">
+      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+        <DollarSign className="w-4 h-4 text-green-600" />
+        월세 범위 선택
+      </label>
+
+      <div className="mb-3 text-green-700 font-semibold text-sm">
+        {formatKoreanMoney(value)}
+      </div>
+
+      <Slider
+        min={MONTHLY_MIN}
+        max={MONTHLY_MAX}
+        step={MONTHLY_STEP}
+        value={value}
+        onChange={handleChange}
+        trackStyle={{ backgroundColor: "#22c55e" }}
+        handleStyle={{ borderColor: "#22c55e", backgroundColor: "#fff" }}
+        railStyle={{ backgroundColor: "#d1fae5" }}
+      />
+    </div>
+  );
+};
 
 const KakaoMap = ({ address, dong }) => {
   const mapRef = useRef(null);
@@ -51,6 +199,22 @@ const KakaoMap = ({ address, dong }) => {
   const [properties, setProperties] = useState([]);
   const [activeTab, setActiveTab] = useState("매매");
   const [refReady, setRefReady] = useState(false);
+  const [filters, setFilters] = useState({
+    type: "",
+    minPrice: "",
+    maxPrice: "",
+    minPyung: "",
+    maxPyung: "",
+    dong: "",
+    complexName: "",
+    isVerified: "",
+    deposit: "",
+    monthlyFee: "",
+    minPriceDisplay: "",
+    maxPriceDisplay: "",
+    depositDisplay: "",
+    monthlyFeeDisplay: "",
+  });
 
   // ✅ mapRef 상태 감지
   useEffect(() => {
@@ -352,26 +516,37 @@ const KakaoMap = ({ address, dong }) => {
   }, [map, mapReady, apartmentMarkers, zoomLevel]);
 
   // ✅ 매물 데이터 가져오기
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const res = await fetch("/api/property/all");
-        if (!res.ok) {
-          throw new Error("매물 데이터를 불러오는데 실패했습니다.");
-        }
-        const data = await res.json();
-        if (data.success) {
-          setProperties(data.properties);
-        } else {
-          throw new Error(data.message);
-        }
-      } catch (err) {
-        console.error("매물 데이터 불러오기 실패:", err);
-        toast.error("매물 데이터를 불러오지 못했습니다");
+  const fetchProperties = async () => {
+    try {
+      console.log("🔍 매물 데이터 요청 시작");
+      const res = await fetch("/api/property/all-public");
+      console.log("📡 API 응답 상태:", res.status);
+
+      if (!res.ok) {
+        throw new Error(
+          `매물 데이터를 불러오는데 실패했습니다. (${res.status})`
+        );
       }
-    };
-    fetchProperties();
-  }, []);
+
+      const data = await res.json();
+      console.log("📦 매물 데이터 응답:", {
+        success: data.success,
+        propertiesCount: data.properties?.length || 0,
+        firstProperty: data.properties?.[0],
+      });
+
+      if (data.success) {
+        setProperties(data.properties);
+        setShowPropertyList(true);
+        console.log("✅ 매물 데이터 설정 완료");
+      } else {
+        throw new Error(data.message || "알 수 없는 오류가 발생했습니다.");
+      }
+    } catch (err) {
+      console.error("❌ 매물 데이터 불러오기 실패:", err);
+      toast.error("매물 데이터를 불러오지 못했습니다");
+    }
+  };
 
   // ✅ 매물 상세 정보 가져오기
   const fetchPropertyDetail = async (propertyId) => {
@@ -427,6 +602,131 @@ const KakaoMap = ({ address, dong }) => {
     );
     map.setLevel(7);
     toast.info("지도를 초기화했습니다.");
+  };
+
+  // 필터 상태 변경 감지 및 자동 적용
+  useEffect(() => {
+    console.log("🔍 필터 상태 변경 감지:", filters);
+    applyFilters();
+  }, [filters]);
+
+  // 필터 변경 핸들러
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  // 매물 유형 필터 버튼 클릭 핸들러
+  const handleTypeFilter = (type) => {
+    console.log("🔍 매물 유형 필터 클릭:", type);
+    setFilters((prev) => ({
+      ...prev,
+      type: prev.type === type ? "" : type,
+    }));
+  };
+
+  // 필터 적용 함수
+  const applyFilters = async () => {
+    try {
+      console.log("🔍 현재 필터 상태:", filters);
+      const queryParams = new URLSearchParams();
+
+      // 필터가 정의되어 있고 null이 아닌 경우에만 추가
+      if (filters.type) queryParams.append("type", filters.type);
+      if (filters.minPrice) queryParams.append("minPrice", filters.minPrice);
+      if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice);
+      if (filters.minPyung) queryParams.append("minPyung", filters.minPyung);
+      if (filters.maxPyung) queryParams.append("maxPyung", filters.maxPyung);
+      if (filters.dong) queryParams.append("dong", filters.dong);
+      if (filters.complexName)
+        queryParams.append("complexName", filters.complexName);
+      if (filters.isVerified !== "")
+        queryParams.append("isVerified", filters.isVerified);
+
+      // 월세인 경우에만 보증금과 월세 필터 추가
+      if (filters.type === "월세") {
+        if (filters.deposit) queryParams.append("deposit", filters.deposit);
+        if (filters.monthlyFee)
+          queryParams.append("monthlyFee", filters.monthlyFee);
+      }
+
+      console.log("🔍 API 요청 파라미터:", queryParams.toString());
+      const response = await fetch(
+        `/api/property/all-public?${queryParams.toString()}`
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        setProperties(data.properties);
+        console.log("✅ 필터 적용 성공:", data.properties.length, "개 매물");
+      } else {
+        console.error("❌ 필터 적용 실패:", data.message);
+      }
+    } catch (error) {
+      console.error("❌ 필터 적용 중 오류:", error);
+    }
+  };
+
+  // 수수료 계산 함수
+  const calculateCommission = (
+    type,
+    price,
+    deposit = 0,
+    monthlyFee = 0,
+    category = "주택" // 기본 주택, 비주택이면 '비주택'
+  ) => {
+    let rate = 0;
+    let max = Infinity;
+    let amount = price;
+
+    // 월세인 경우 보증금 + (월세 x 100)
+    if (type === "월세") {
+      // 💡 월세 환산금액 = 보증금 + (월세 × 100) 후 원화 변환
+      amount = (deposit + monthlyFee * 100) * 10000;
+    } else {
+      amount = price * 10000; // 매매, 전세도 원 단위로 맞춰줘야 정확
+    }
+
+    if (category === "비주택") {
+      rate = 0.009; // 법적 상한 0.9%
+      return {
+        rate,
+        commission: amount * rate,
+        message: "📌 비주택 매물은 최대 0.9% 이내에서 협의 가능합니다.",
+      };
+    }
+
+    if (type === "매매") {
+      if (amount < 50000000) {
+        rate = 0.006;
+        max = 250000;
+      } else if (amount < 200000000) {
+        rate = 0.005;
+        max = 800000;
+      } else {
+        rate = 0.004;
+        max = 1000000;
+      }
+    } else if (type === "전세" || type === "월세") {
+      if (amount < 50000000) {
+        rate = 0.005;
+        max = 200000;
+      } else if (amount < 100000000) {
+        rate = 0.004;
+        max = 300000;
+      } else {
+        rate = 0.003;
+        max = 500000;
+      }
+    }
+
+    return {
+      rate,
+      commission: Math.min(amount * rate, max),
+      message: null,
+    };
   };
 
   return (
@@ -537,39 +837,137 @@ const KakaoMap = ({ address, dong }) => {
                     </button>
                   </div>
 
-                  {/* 필터 탭 */}
+                  {/* 필터 섹션 */}
                   <div className="p-4 border-b">
-                    <div className="flex gap-2 mb-4">
-                      {["매매", "전세", "월세"].map((tab) => (
+                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                      <Filter className="w-5 h-5 text-green-600" />
+                      필터
+                    </h3>
+
+                    {/* 매물 유형 필터 */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                        <Home className="w-4 h-4 text-green-600" />
+                        매물 유형
+                      </label>
+                      <div className="flex gap-2">
                         <button
-                          key={tab}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                            activeTab === tab
+                          onClick={() => handleTypeFilter("매매")}
+                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                            filters.type === "매매"
                               ? "bg-green-600 text-white"
-                              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           }`}
-                          onClick={() => setActiveTab(tab)}
                         >
-                          {tab}
+                          매매
                         </button>
-                      ))}
+                        <button
+                          onClick={() => handleTypeFilter("전세")}
+                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                            filters.type === "전세"
+                              ? "bg-green-600 text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
+                        >
+                          전세
+                        </button>
+                        <button
+                          onClick={() => handleTypeFilter("월세")}
+                          className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                            filters.type === "월세"
+                              ? "bg-green-600 text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
+                        >
+                          월세
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex gap-2 overflow-x-auto pb-2">
-                      {["아파트", "오피스텔", "빌라", "단독주택"].map(
-                        (type) => (
-                          <button
-                            key={type}
-                            className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm hover:bg-gray-200 transition-colors"
-                          >
-                            {type}
-                          </button>
-                        )
-                      )}
+
+                    {/* 가격 범위 슬라이더 */}
+                    {filters.type === "월세" ? (
+                      <>
+                        <DepositRangeSlider
+                          filters={filters}
+                          setFilters={setFilters}
+                        />
+                        <MonthlyRentRangeSlider
+                          filters={filters}
+                          setFilters={setFilters}
+                        />
+                      </>
+                    ) : (
+                      <PriceRangeSlider
+                        filters={filters}
+                        setFilters={setFilters}
+                      />
+                    )}
+
+                    {/* 단지명 */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                        <Building className="w-4 h-4 text-green-600" />
+                        단지명
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          name="complexName"
+                          value={filters.complexName}
+                          onChange={(e) =>
+                            handleFilterChange(e.target.name, e.target.value)
+                          }
+                          placeholder="단지명을 입력하세요"
+                          className="w-full p-2 pl-8 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        />
+                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                      </div>
+                    </div>
+
+                    {/* 실매물 여부 */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-green-600" />
+                        실매물 여부
+                      </label>
+                      <select
+                        name="isVerified"
+                        value={filters.isVerified}
+                        onChange={(e) =>
+                          handleFilterChange(e.target.name, e.target.value)
+                        }
+                        className="w-full p-2 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      >
+                        <option value="">전체</option>
+                        <option value="true">실매물만</option>
+                        <option value="false">일반 매물만</option>
+                      </select>
+                    </div>
+
+                    {/* 필터 버튼 */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={applyFilters}
+                        className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <Check className="w-4 h-4" />
+                        필터 적용
+                      </button>
+                      <button
+                        onClick={() => {
+                          resetFilters();
+                          setShowPropertyList(false);
+                        }}
+                        className="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 flex items-center justify-center gap-2 transition-colors"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        초기화
+                      </button>
                     </div>
                   </div>
 
                   {/* 매물 목록 */}
-                  <div className="overflow-y-auto h-[calc(100%-120px)]">
+                  <div className="overflow-y-auto h-[calc(100%-400px)]">
                     {properties.map((property) => (
                       <motion.div
                         key={property.id}
@@ -584,43 +982,72 @@ const KakaoMap = ({ address, dong }) => {
                             : ""
                         }`}
                       >
-                        <div className="flex gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-gray-500">
-                                {property.dong}
+                        <div className="flex flex-col gap-2 p-3 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+                          {/* 제목과 실매물 뱃지 */}
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-gray-800 truncate">
+                              {property.title}
+                            </h3>
+                            {property.isVerified && (
+                              <span className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full whitespace-nowrap">
+                                실매물 확인
                               </span>
-                              <span className="text-lg font-bold">
-                                {property.complexName}
-                              </span>
-                              {property.isVerified && (
-                                <span className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">
-                                  실매물 확인
-                                </span>
+                            )}
+                          </div>
+
+                          {/* 단지명 */}
+                          <p className="text-sm text-gray-500 truncate">
+                            {property.complexName}
+                          </p>
+
+                          {/* 매물 정보 태그들 */}
+                          <div className="flex flex-wrap gap-1.5">
+                            <span className="bg-gray-200 px-2 py-1  text-xs text-gray-600">
+                              {property.type}
+                            </span>
+                            <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                              {property.dong}동
+                            </span>
+                            <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                              {property.floor}층
+                            </span>
+                            <span className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                              {property.area}㎡ ({property.pyung}평)
+                            </span>
+                          </div>
+
+                          {/* 가격 */}
+                          <div className="mt-1 text-green-700 text-lg font-bold">
+                            {property.type === "월세" ? (
+                              <>
+                                보증금 {property.deposit}만원 / 월세{" "}
+                                {property.monthlyFee}만원
+                              </>
+                            ) : (
+                              <>{property.priceDisplay}원</>
+                            )}
+                          </div>
+
+                          {/* 설명 */}
+                          <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                            {property.description}
+                          </p>
+
+                          {/* 중개사 정보 */}
+                          <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                            <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-200">
+                              {property.agent.user.profileImage && (
+                                <img
+                                  src={property.agent.user.profileImage}
+                                  alt={property.agent.user.name}
+                                  className="w-full h-full object-cover"
+                                />
                               )}
                             </div>
-                            <div className="mt-2">
-                              <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                {property.type}
-                              </span>
-                              <span className="ml-2 text-lg font-bold text-green-600">
-                                {property.price.toLocaleString()}원
-                              </span>
-                            </div>
-                            <div className="mt-1 text-sm text-gray-500">
-                              {property.area}㎡ ({property.pyung}평) ·{" "}
-                              {property.dong}동 {property.floor}층
-                            </div>
-                            <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                              {property.description}
-                            </p>
-                          </div>
-                          <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                            <img
-                              src={property.images[0]}
-                              alt={property.complexName}
-                              className="w-full h-full object-cover"
-                            />
+                            <span>
+                              {property.agent.user.name} (
+                              {property.agent.officeName})
+                            </span>
                           </div>
                         </div>
                       </motion.div>
@@ -633,169 +1060,226 @@ const KakaoMap = ({ address, dong }) => {
             {/* 매물 상세 정보 사이드바 */}
             <AnimatePresence>
               {showPropertyDetail && selectedProperty && (
-                <motion.div
-                  initial={{ x: -400 }}
-                  animate={{ x: 0 }}
-                  exit={{ x: -400 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="absolute top-0 left-96 w-96 h-full bg-white shadow-lg overflow-hidden z-50"
-                >
-                  <div className="p-4 border-b flex justify-between items-center">
-                    <button
-                      onClick={() => setShowPropertyDetail(false)}
-                      className="p-2 hover:bg-gray-100 rounded-full"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                    <h2 className="text-xl font-bold text-green-700">
-                      {selectedProperty.complexName}
-                    </h2>
-                  </div>
-                  <div className="overflow-y-auto h-[calc(100%-60px)]">
-                    <div className="p-4">
-                      {/* 가격 정보 */}
-                      <div className="flex items-center gap-2">
-                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                          {selectedProperty.type}
-                        </span>
-                        <span className="text-2xl font-bold text-green-600">
-                          {selectedProperty.price.toLocaleString()}원
-                        </span>
-                      </div>
+                <>
+                  {console.log("📦 선택된 매물 상세:", selectedProperty)}
+                  <motion.div
+                    initial={{ x: -400 }}
+                    animate={{ x: 0 }}
+                    exit={{ x: -400 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="absolute top-0 left-96 w-96 h-full bg-white shadow-lg overflow-hidden z-50"
+                  >
+                    <div className="p-4 border-b flex justify-between items-center">
+                      <button
+                        onClick={() => setShowPropertyDetail(false)}
+                        className="p-2 hover:bg-gray-100 rounded-full"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                      <h2 className="text-xl font-bold text-green-700">
+                        {selectedProperty.complexName}
+                      </h2>
+                    </div>
+                    <div className="overflow-y-auto h-[calc(100%-60px)]">
+                      <div className="p-4">
+                        {/* 가격 정보 */}
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                            {selectedProperty.type}
+                          </span>
+                          {selectedProperty.type === "월세" ? (
+                            <div className="flex flex-col">
+                              <span className="text-base text-gray-500">
+                                보증금
+                              </span>
+                              <span className="text-xl font-bold text-green-600 leading-tight">
+                                {selectedProperty.deposit}만원
+                                <span className="mx-1 text-sm text-gray-400">
+                                  /
+                                </span>
+                                월세 {selectedProperty.monthlyFee}만원
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-2xl font-bold text-green-600">
+                              {selectedProperty.priceDisplay}
+                            </span>
+                          )}
+                        </div>
 
-                      {/* 세대 정보 */}
-                      <div className="mt-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          세대 정보
-                        </h3>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <p className="text-sm text-gray-500">면적</p>
-                            <p className="font-medium">
-                              {selectedProperty.area}㎡ (
-                              {selectedProperty.pyung}평)
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm text-gray-500">방수/욕실수</p>
-                            <p className="font-medium">
-                              {selectedProperty.rooms}개 /{" "}
-                              {selectedProperty.bathrooms}개
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm text-gray-500">동</p>
-                            <p className="font-medium">
-                              {selectedProperty.dong}동
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm text-gray-500">해당층/총층</p>
-                            <p className="font-medium">
-                              {selectedProperty.floor}층 /{" "}
-                              {selectedProperty.totalFloors}층
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm text-gray-500">관리비</p>
-                            <p className="font-medium">
-                              {selectedProperty.maintenanceFee.toLocaleString()}
-                              원
-                            </p>
+                        {/* 세대 정보 */}
+                        <div className="mt-6">
+                          <h3 className="text-lg font-semibold mb-4">
+                            세대 정보
+                          </h3>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-sm text-gray-500">면적</p>
+                              <p className="font-medium">
+                                {selectedProperty.area}㎡ (
+                                {selectedProperty.pyung}평)
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                방수/욕실수
+                              </p>
+                              <p className="font-medium">
+                                {selectedProperty.rooms}개 /{" "}
+                                {selectedProperty.bathrooms}개
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-500">동</p>
+                              <p className="font-medium">
+                                {selectedProperty.dong}동
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                해당층/총층
+                              </p>
+                              <p className="font-medium">
+                                {selectedProperty.floor}층 /{" "}
+                                {selectedProperty.totalFloors}층
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-500">관리비</p>
+                              <p className="font-medium">
+                                {selectedProperty.maintenanceFee}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* 이미지 슬라이더 */}
-                      <div className="mt-6">
-                        <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
-                          <img
-                            src={selectedProperty.images[0]}
-                            alt={selectedProperty.complexName}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-
-                      {/* 실매물 확인 및 중개사 정보 */}
-                      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                        {selectedProperty.isVerified && (
-                          <div className="flex items-center gap-2 mb-4">
-                            <span className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">
-                              실매물 확인
-                            </span>
-                            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                              {selectedProperty.type}
-                            </span>
-                            <span className="text-lg font-bold text-green-600">
-                              {selectedProperty.price.toLocaleString()}원
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
+                        {/* 이미지 슬라이더 */}
+                        <div className="mt-6">
+                          <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden">
                             <img
-                              src={selectedProperty.agent.profileImage}
-                              alt={selectedProperty.agent.name}
+                              src={selectedProperty.images[0]}
+                              alt={selectedProperty.complexName}
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <div>
-                            <p className="font-semibold">
-                              {selectedProperty.agent.name}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {selectedProperty.agent.officeName}
-                            </p>
-                            <p className="text-xs text-gray-400">
-                              등록 매물 {selectedProperty.agent.propertyCount}개
-                            </p>
+                        </div>
+
+                        {/* 실매물 확인 및 중개사 정보 */}
+                        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                          {selectedProperty.isVerified && (
+                            <div className="flex items-center gap-2 mb-4">
+                              <span className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full">
+                                실매물 확인
+                              </span>
+                              <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                {selectedProperty.type}
+                              </span>
+                              <span className="text-lg font-bold text-green-600">
+                                {selectedProperty.priceDisplay}
+                              </span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
+                              <img
+                                src={selectedProperty.agent.user.profileImage}
+                                alt={selectedProperty.agent.user.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <p className="font-semibold">
+                                {selectedProperty.agent.user.name}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {selectedProperty.agent.officeName}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                등록 매물{" "}
+                                {selectedProperty.agent._count.properties}개
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* 상세 설명 */}
-                      <div className="mt-6">
-                        <h3 className="text-lg font-semibold mb-2">
-                          상세 설명
-                        </h3>
-                        <p className="text-gray-600 whitespace-pre-line">
-                          {selectedProperty.description}
-                        </p>
-                      </div>
-
-                      {/* 찜하기 및 문의하기 버튼 */}
-                      <div className="mt-6 flex gap-3">
-                        <button className="flex-1 bg-gray-100 text-gray-600 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-                          <Star className="w-5 h-5" />
-                          찜하기
-                        </button>
-                        <button className="flex-1 bg-green-600 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition">
-                          <Phone className="w-5 h-5" />
-                          중개사 문의하기
-                        </button>
-                      </div>
-
-                      {/* 중개수수료 계산기 */}
-                      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                        <h3 className="text-lg font-semibold mb-2">
-                          중개수수료 계산기
-                        </h3>
-                        <div className="text-sm text-gray-600">
-                          <p>
-                            매매가: {selectedProperty.price.toLocaleString()}원
+                        {/* 상세 설명 */}
+                        <div className="mt-6">
+                          <h3 className="text-lg font-semibold mb-2">
+                            상세 설명
+                          </h3>
+                          <p className="text-gray-600 whitespace-pre-line">
+                            {selectedProperty.description}
                           </p>
-                          <p>수수료율: 0.4%</p>
-                          <p className="mt-2 font-semibold">
-                            예상 수수료:{" "}
-                            {(selectedProperty.price * 0.004).toLocaleString()}
-                            원
+                        </div>
+
+                        {/* 찜하기 및 문의하기 버튼 */}
+                        <div className="mt-6 flex gap-3">
+                          <button className="flex-1 bg-gray-100 text-gray-600 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
+                            <Star className="w-5 h-5" />
+                            찜하기
+                          </button>
+                          <button className="flex-1 bg-green-600 text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition">
+                            <Phone className="w-5 h-5" />
+                            중개사 문의하기
+                          </button>
+                        </div>
+
+                        {/* 중개수수료 계산기 */}
+                        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <Calculator className="w-5 h-5 text-green-600" />
+                            중개수수료 계산기
+                          </h3>
+
+                          {selectedProperty && (
+                            <>
+                              {(() => {
+                                const { rate, commission, message } =
+                                  calculateCommission(
+                                    selectedProperty.type,
+                                    selectedProperty.price,
+                                    selectedProperty.deposit,
+                                    selectedProperty.monthlyFee,
+                                    selectedProperty.category
+                                  );
+                                return (
+                                  <div className="space-y-2 text-sm">
+                                    <p>
+                                      ✅{" "}
+                                      <span className="font-bold">
+                                        {selectedProperty.type}
+                                      </span>{" "}
+                                      요율:{" "}
+                                      <span className="text-green-600 font-semibold">
+                                        {(rate * 100).toFixed(1)}%
+                                      </span>
+                                    </p>
+                                    <p>
+                                      💵 예상 수수료:{" "}
+                                      <span className="text-green-700 font-bold text-lg">
+                                        {commission.toLocaleString()}원
+                                      </span>
+                                    </p>
+                                    {message && (
+                                      <p className="text-yellow-600 text-xs mt-2">
+                                        {message}
+                                      </p>
+                                    )}
+                                  </div>
+                                );
+                              })()}
+                            </>
+                          )}
+
+                          <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                            <Info className="w-4 h-4" /> 실매물 등록 시 소비자와
+                            협의해 수수료율 조정이 가능합니다.
                           </p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </>
               )}
             </AnimatePresence>
           </>

@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/@prisma/client"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -224,16 +224,22 @@ model Property {
   dong           String
   complexName    String
   type           String    // 매매, 전세, 월세
-  price          Int
+  category       String    @default("주택") // 주택, 비주택
+  price          Int       // 실제 연산용 가격: 단위는 원 (예: 120000000)
+  priceDisplay   String    // 보기용 문자열: 예 "1억2천"
   area           Float
   pyung          Float
   floor          Int
   totalFloors    Int
   rooms          Int
   bathrooms      Int
-  maintenanceFee Int
+  maintenanceFee String    // 관리비 (문자열로 저장)
+  monthlyFee     Int?      // 월세 (실제 연산용)
+  monthlyDisplay String?   // 월세 보기용 문자열
+  deposit        Int?      // 전세/보증금 (실제 연산용)
+  depositDisplay String?   // 전세/보증금 보기용 문자열
   direction      String
-  description    String
+  description    String @db.Text
   images         Json      // String[] 대신 Json 타입 사용
   isVerified     Boolean   @default(false)
   isHidden       Boolean   @default(false)

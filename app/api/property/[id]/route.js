@@ -9,7 +9,16 @@ export async function GET(request, { params }) {
     const property = await prisma.property.findUnique({
       where: { id },
       include: {
-        agent: true,
+        agent: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                profileImage: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -20,7 +29,16 @@ export async function GET(request, { params }) {
       );
     }
 
-    return NextResponse.json({ success: true, property });
+    return NextResponse.json({
+      success: true,
+      property: {
+        ...property,
+        price: property.price,
+        priceDisplay: property.priceDisplay,
+        maintenanceFee: property.maintenanceFee,
+        maintenanceDisplay: property.maintenanceDisplay,
+      },
+    });
   } catch (error) {
     console.error("매물 상세 조회 오류:", error);
     return NextResponse.json(

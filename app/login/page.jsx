@@ -1,20 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { toast } from "sonner";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const KAKAO_AUTH_URL = `${process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}`;
 const NAVER_AUTH_URL = `${process.env.NEXT_PUBLIC_NAVER_AUTH_URL}`;
 const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL}`;
 
 export default function LoginPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const params = searchParams.toString();
+    const error = searchParams.get("error");
+
+    if (error) {
+      toast.error(decodeURIComponent(error));
+    }
+  }, [searchParams.toString()]);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -41,7 +53,12 @@ export default function LoginPage() {
 
     if (res.ok) {
       toast.success("👋 로그인 성공! 환영합니다.");
-      window.location.href = "/mypage";
+      const from = searchParams.get("from");
+      if (from) {
+        router.push(decodeURIComponent(from));
+      } else {
+        router.push("/");
+      }
     } else {
       toast.error(data.error || "로그인에 실패했습니다.");
     }
