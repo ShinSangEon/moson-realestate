@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-export default function FavoriteButton({ complexUniqueId, compact = false }) {
+export default function FavoriteButton({ kaptCode, compact = false }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true); // 초기 로딩 방지
 
@@ -11,12 +11,9 @@ export default function FavoriteButton({ complexUniqueId, compact = false }) {
   useEffect(() => {
     const fetchFavorite = async () => {
       try {
-        const res = await fetch(
-          `/api/favorite?complexUniqueId=${complexUniqueId}`,
-          {
-            credentials: "include", // ✅ 쿠키 포함
-          }
-        );
+        const res = await fetch(`/api/favorite?kaptCode=${kaptCode}`, {
+          credentials: "include", // ✅ 쿠키 포함
+        });
         const data = await res.json();
         if (res.ok) {
           setIsFavorite(data.isFavorite);
@@ -29,7 +26,7 @@ export default function FavoriteButton({ complexUniqueId, compact = false }) {
     };
 
     fetchFavorite();
-  }, [complexUniqueId]);
+  }, [kaptCode]);
 
   // ✅ 찜 토글
   const handleClick = async () => {
@@ -40,7 +37,7 @@ export default function FavoriteButton({ complexUniqueId, compact = false }) {
           "Content-Type": "application/json",
         },
         credentials: "include", // ✅ 로그인 세션 유지 필수
-        body: JSON.stringify({ complexUniqueId }),
+        body: JSON.stringify({ kaptCode }),
       });
 
       const data = await res.json();

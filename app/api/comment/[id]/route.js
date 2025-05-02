@@ -1,23 +1,43 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
-import { getAuthUserId } from "@/lib/auth";
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   try {
-    const userId = await getAuthUserId();
+    const { id } = await context.params;
+    const commentId = parseInt(id);
+    if (isNaN(commentId)) {
+      return NextResponse.json(
+        { success: false, message: "잘못된 댓글 ID입니다." },
+        { status: 400 }
+      );
+    }
 
-    if (!userId) {
+    // 인증 확인
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+    if (!token) {
       return NextResponse.json(
         { success: false, message: "로그인이 필요합니다." },
         { status: 401 }
       );
     }
 
-    const commentId = parseInt(params.id);
+    // 토큰 검증
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = parseInt(decoded.userId);
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { success: false, message: "잘못된 사용자 ID입니다." },
+        { status: 400 }
+      );
+    }
 
+    // 댓글 존재 여부 및 작성자 확인
     const comment = await prisma.comment.findUnique({
       where: { id: commentId },
-      include: { author: true },
+      select: { authorId: true },
     });
 
     if (!comment) {
@@ -27,24 +47,30 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // 본인 또는 관리자만 삭제 가능
-    const isAdmin = comment.author?.role === "admin";
-    if (comment.authorId !== userId && !isAdmin) {
+    if (comment.authorId !== userId) {
       return NextResponse.json(
-        { success: false, message: "삭제 권한이 없습니다." },
+        { success: false, message: "댓글 삭제 권한이 없습니다." },
         { status: 403 }
       );
     }
 
-    // 대댓글도 같이 삭제
-    await prisma.comment.deleteMany({ where: { parentId: commentId } });
-    await prisma.comment.delete({ where: { id: commentId } });
+    // 댓글 삭제
+    await prisma.comment.delete({
+      where: { id: commentId },
+    });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      message: "댓글이 삭제되었습니다.",
+    });
   } catch (error) {
-    console.error("댓글 삭제 실패:", error);
+    console.error("댓글 삭제 중 오류:", error);
     return NextResponse.json(
-      { success: false, message: "댓글 삭제에 실패했습니다." },
+      {
+        success: false,
+        message: "댓글 삭제 중 오류가 발생했습니다.",
+        error: error.message,
+      },
       { status: 500 }
     );
   }

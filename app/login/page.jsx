@@ -45,6 +45,7 @@ export default function LoginPage() {
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(form),
     });
 
@@ -82,14 +83,14 @@ export default function LoginPage() {
             href={process.env.NEXT_PUBLIC_KAKAO_AUTH_URL}
             className="flex items-center justify-center gap-2 w-full py-2 rounded bg-yellow-400 hover:bg-yellow-300 transition"
           >
-            <Image src="/kakao.png" alt="kakao" width={20} height={20} />
+            <Image src="/images/kakao.png" alt="kakao" width={20} height={20} />
             <span className="text-sm font-medium">카카오로 로그인</span>
           </a>
           <a
             href="/api/auth/naver/login"
             className="flex items-center justify-center gap-2 w-full py-2 rounded bg-green-500 hover:bg-green-400 text-white transition"
           >
-            <Image src="/naver.png" alt="naver" width={20} height={20} />
+            <Image src="/images/naver.png" alt="naver" width={20} height={20} />
             <span className="text-sm font-medium">네이버로 로그인</span>
           </a>
 
@@ -97,7 +98,12 @@ export default function LoginPage() {
             href="/api/auth/google"
             className="flex items-center justify-center gap-2 w-full py-2 rounded bg-white border hover:bg-gray-100 transition"
           >
-            <Image src="/google.png" alt="google" width={20} height={20} />
+            <Image
+              src="/images/google.png"
+              alt="google"
+              width={20}
+              height={20}
+            />
             <span className="text-sm font-medium">구글로 로그인</span>
           </a>
         </div>

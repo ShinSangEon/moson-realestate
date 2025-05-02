@@ -1,14 +1,27 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getAuthUserId } from "@/lib/auth";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
 export async function GET(request) {
   try {
-    const userId = await getAuthUserId(request);
-    if (!userId || isNaN(userId)) {
+    // 인증 확인
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+    if (!token) {
       return NextResponse.json(
         { success: false, message: "로그인이 필요합니다" },
         { status: 401 }
+      );
+    }
+
+    // 토큰 검증
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = parseInt(decoded.userId);
+    if (isNaN(userId)) {
+      return NextResponse.json(
+        { success: false, message: "잘못된 사용자 ID입니다" },
+        { status: 400 }
       );
     }
 

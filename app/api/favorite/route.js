@@ -6,18 +6,18 @@ const prisma = new PrismaClient();
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const complexUniqueId = searchParams.get("complexUniqueId");
+  const kaptCode = searchParams.get("kaptCode");
   const userId = await getAuthUserId();
 
-  if (!userId || !complexUniqueId) {
+  if (!userId || !kaptCode) {
     return NextResponse.json({ isFavorite: false });
   }
 
   const favorite = await prisma.favorite.findUnique({
     where: {
-      userId_complexUniqueId: {
+      userId_kaptCode: {
         userId,
-        complexUniqueId,
+        kaptCode,
       },
     },
   });
@@ -27,7 +27,7 @@ export async function GET(req) {
 
 export async function POST(req) {
   const userId = await getAuthUserId();
-  const { complexUniqueId } = await req.json();
+  const { kaptCode } = await req.json();
 
   if (!userId) {
     return NextResponse.json(
@@ -36,18 +36,18 @@ export async function POST(req) {
     );
   }
 
-  if (!complexUniqueId) {
+  if (!kaptCode) {
     return NextResponse.json(
-      { error: "단지 고유번호가 누락되었습니다." },
+      { error: "단지 코드가 누락되었습니다." },
       { status: 400 }
     );
   }
 
   const existing = await prisma.favorite.findUnique({
     where: {
-      userId_complexUniqueId: {
+      userId_kaptCode: {
         userId,
-        complexUniqueId,
+        kaptCode,
       },
     },
   });
@@ -59,7 +59,7 @@ export async function POST(req) {
     await prisma.favorite.create({
       data: {
         userId,
-        complexUniqueId,
+        kaptCode,
       },
     });
     return NextResponse.json({ isFavorite: true });

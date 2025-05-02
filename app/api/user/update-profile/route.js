@@ -1,43 +1,57 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getAuthUserId } from "@/lib/auth";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
-export async function POST(req) {
+export async function PUT(request) {
   try {
-    const userId = await getAuthUserId(req);
-    if (!userId) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+
+    if (!token) {
       return NextResponse.json(
-        { success: false, message: "인증되지 않았습니다." },
+        { success: false, message: "로그인이 필요합니다." },
         { status: 401 }
       );
     }
 
-    const { profileImage } = await req.json();
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.userId;
 
-    if (!profileImage || typeof profileImage !== "string") {
+      const body = await request.json();
+      const { nickname, phoneNumber, profileImage } = body;
+
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          nickname,
+          phoneNumber,
+          profileImage,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          phoneNumber: true,
+          profileImage: true,
+          nickname: true,
+        },
+      });
+
+      return NextResponse.json({ success: true, user: updatedUser });
+    } catch (jwtError) {
+      console.error("JWT 검증 오류:", jwtError);
       return NextResponse.json(
-        { success: false, message: "올바른 이미지 주소가 아닙니다." },
-        { status: 400 }
+        { success: false, message: "인증 토큰이 유효하지 않습니다." },
+        { status: 401 }
       );
     }
-
-    // 유저 정보 업데이트
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        profileImage,
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: "프로필 사진이 저장되었습니다.",
-      user: updatedUser,
-    });
   } catch (error) {
-    console.error("❌ 프로필 이미지 업데이트 실패:", error);
+    console.error("프로필 업데이트 실패:", error);
     return NextResponse.json(
-      { success: false, message: "업데이트 실패" },
+      { success: false, message: "프로필 업데이트에 실패했습니다." },
       { status: 500 }
     );
   }

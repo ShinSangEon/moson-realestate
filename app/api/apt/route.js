@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 
 // 주소에서 동 추출하는 함수
 function extractDong(address) {
-  // "경상남도 진주시 상대동 300-5" 형식의 주소에서 동 추출
-  const match = address.match(/진주시\s+([^\s]+동)/);
+  // '진주시' 다음에 나오는 '읍', '면', '동'으로 끝나는 단어를 추출
+  const match = address.match(/진주시\s+([^\s]+(동|읍|면))/);
   return match ? match[1] : null;
 }
 

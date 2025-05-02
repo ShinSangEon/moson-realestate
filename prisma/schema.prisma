@@ -8,6 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+  AGENT
+}
+
 model CCTV {
   id               Int      @id @default(autoincrement())
   address          String
@@ -26,59 +32,31 @@ model CCTV {
   updatedAt DateTime @updatedAt
 }
 
-model Apartment_Details {
-  id                  Int      @id @default(autoincrement())
-  address             String
-  complexType         String
-  complexNamePublic   String?
-  complexNameBuilding String?
-  complexNameRoad     String?
-  complexUniqueId     String   @unique
-  buildingCount       Int
-  landUniqueId        String
-  householdCount      Int
-  approvalDate        DateTime
-  buildingName        String?
-  floorCount          Int
-  latitude            Float
-  longitude           Float
-  marker              Apartment_Marker?
-
-  favorites Favorite[] // ✅ 연결된 찜 목록
-  transactions Apartment_Transaction[] // 거래 기록
-  reports Report[] // 보고서
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Apartment_Marker {
-  id              Int      @id @default(autoincrement())
-  complexUniqueId String   @unique
-  latitude        Float
-  longitude       Float
-  details         Apartment_Details? @relation(fields: [complexUniqueId], references: [complexUniqueId])
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
-
 model User {
-  id            Int        @id @default(autoincrement())
-  email         String     @unique
-  password      String
-  name          String
-  role          String     @default("user") // "user" 또는 "agent"
-  phoneNumber   String?
-  profileImage  String?
-  favorites     Favorite[] // ✅ 연결된 찜 목록
-  reports       Report[]   // 보고서
-  createdAt     DateTime   @default(now())
-  posts         Post[]     // ✅ 이 줄이 필요해!
-  comments      Comment[]
-  notifications Notification[] // ✅ 이 줄을 추가!
-  agent         Agent?     // 공인중개사 정보 (role이 "agent"인 경우)
-  
-  nickname       String?   // 🔜 닉네임도 같이 쓸 거니까 미리 넣어도 좋아
+  id                  Int       @id @default(autoincrement())
+  name                String
+  email               String    @unique
+  password            String
+  role                Role      @default(USER)
+  phoneNumber         String?
+  profileImage        String?
+  nickname            String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt @default(now())
+  posts               Post[]
+  comments            Comment[]
+  likes               Like[]
+  bookmarks           Bookmark[]
+  acceptedAnswersCount Int      @default(0)
+  points              Point[]
+  badges              Badge[]
+  rank                String    @default("BRONZE")
+  agent               Agent?
+  favorites           Favorite[]
+  notifications       Notification[]
+  reports             Report[]
+
+  @@index([email])
 }
 
 model Agent {
@@ -95,27 +73,26 @@ model Agent {
 }
 
 model Favorite {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  complexUniqueId String
-  createdAt       DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  kaptCode  String
+  createdAt DateTime @default(now())
 
-  // ✅ 관계 설정
-  user      User              @relation(fields: [userId], references: [id])
-  apartment Apartment_Details @relation(fields: [complexUniqueId], references: [complexUniqueId])
+  user      User               @relation(fields: [userId], references: [id])
+  apartment ApartmentBasicInfo @relation(fields: [kaptCode], references: [kaptCode])
 
-  @@unique([userId, complexUniqueId])
+  @@unique([userId, kaptCode])
 }
 
 model FindRequest {
   id        Int      @id @default(autoincrement())
   phone     String
-  types     String // 예: "원룸류,기타:고시원"
+  types     String
   dealType  String
-  leaseTerm String? // dealType === "임차"일 경우만
+  leaseTerm String?
   budget    String
   location  String
-  moveIn    String // 예: "2주 이내,기타:내년 1월"
+  moveIn    String
   note      String?
   createdAt DateTime @default(now())
 }
@@ -123,10 +100,10 @@ model FindRequest {
 model SellRequest {
   id           Int      @id @default(autoincrement())
   phone        String
-  propertyType String // 체크리스트+기타 합친 값
+  propertyType String
   location     String
   price        String
-  dealType     String // "매도" or "임대"
+  dealType     String
   note         String?
   createdAt    DateTime @default(now())
 }
@@ -135,77 +112,83 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
-  imageUrl  String? // 선택 사항
-  category  String // 예: "자랑", "궁금해요", "잡담"
+  imageUrl  String?
+  category  String
   views     Int      @default(0)
   authorId  Int?
   createdAt DateTime @default(now())
+  isAgentOnly Boolean @default(false)
 
   author   User?     @relation(fields: [authorId], references: [id])
   comments Comment[]
+  likes    Like[]
+  bookmarks Bookmark[]
+  postViews PostView[]
+  notifications Notification[]
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   content   String
-  post      Post      @relation(fields: [postId], references: [id])
-  postId    Int
-  author    User      @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isAccepted Boolean @default(false)
+  
+  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
-  parentId  Int? // ← 대댓글용 (null이면 일반 댓글)
-  children  Comment[] @relation("CommentChildren")
-  parent    Comment?  @relation("CommentChildren", fields: [parentId], references: [id])
-  createdAt DateTime  @default(now())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  parentId  Int?
+  replies   Comment[] @relation("CommentReplies")
+  notifications Notification[]
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
 }
 
 model Notification {
   id        Int      @id @default(autoincrement())
-  type      String // e.g. "comment"
-  message   String
-  user      User     @relation(fields: [userId], references: [id])
   userId    Int
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
-}
-
-model Apartment_Transaction {
-  id              Int      @id @default(autoincrement())
-  complexUniqueId String
-  dealAmount      Int      // 거래금액
-  dealYear        Int      // 거래년도
-  dealMonth       Int      // 거래월
-  dealDay         Int      // 거래일
-  area            Float    // 전용면적
-  floor           Int      // 층
-  apartment       Apartment_Details @relation(fields: [complexUniqueId], references: [complexUniqueId])
-
+  type      String   // "COMMENT", "REPLY", "ACCEPT"
+  message   String
+  postId    Int?
+  commentId Int?
+  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
+
+  @@index([userId])
 }
 
 model Report {
-  id              Int      @id @default(autoincrement())
-  complexUniqueId String
-  title           String
-  content         String
-  price           Int
-  status          String   @default("pending") // pending, completed, failed
-  userId          Int
-  apartment       Apartment_Details @relation(fields: [complexUniqueId], references: [complexUniqueId])
-  user            User     @relation(fields: [userId], references: [id])
-  payment         Payment?
+  id        Int                @id @default(autoincrement())
+  kaptCode  String
+  title     String
+  content   String
+  price     Int
+  status    String             @default("pending")
+  userId    Int
+  apartment ApartmentBasicInfo @relation(fields: [kaptCode], references: [kaptCode])
+  user      User               @relation(fields: [userId], references: [id])
+  payment   Payment?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Payment {
-  id        Int      @id @default(autoincrement())
-  reportId  Int      @unique
-  amount    Int
-  method    String   // card, bank_transfer, etc.
-  status    String   @default("pending") // pending, completed, failed
-  report    Report   @relation(fields: [reportId], references: [id])
+  id       Int    @id @default(autoincrement())
+  reportId Int    @unique
+  amount   Int
+  method   String
+  status   String @default("pending")
+  report   Report @relation(fields: [reportId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -214,7 +197,7 @@ model Payment {
 model Dong_Boundary {
   id        Int      @id @default(autoincrement())
   dongName  String   @unique
-  boundary  Json     // GeoJSON 형식의 경계 데이터
+  boundary  Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -225,24 +208,24 @@ model Property {
   address        String
   dong           String
   complexName    String
-  type           String    // 매매, 전세, 월세
-  category       String    @default("주택") // 주택, 비주택
-  price          Int       // 실제 연산용 가격: 단위는 원 (예: 120000000)
-  priceDisplay   String    // 보기용 문자열: 예 "1억2천"
+  type           String
+  category       String    @default("주택")
+  price          Int
+  priceDisplay   String
   area           Float
   pyung          Float
   floor          Int
   totalFloors    Int
   rooms          Int
   bathrooms      Int
-  maintenanceFee String    // 관리비 (문자열로 저장)
-  monthlyFee     Int?      // 월세 (실제 연산용)
-  monthlyDisplay String?   // 월세 보기용 문자열
-  deposit        Int?      // 전세/보증금 (실제 연산용)
-  depositDisplay String?   // 전세/보증금 보기용 문자열
+  maintenanceFee String
+  monthlyFee     Int?
+  monthlyDisplay String?
+  deposit        Int?
+  depositDisplay String?
   direction      String
-  description    String @db.Text
-  images         Json      // String[] 대신 Json 타입 사용
+  description    String    @db.Text
+  images         Json
   isVerified     Boolean   @default(false)
   isHidden       Boolean   @default(false)
   lastVerifiedAt DateTime?
@@ -261,5 +244,190 @@ model ApiKey {
   description String?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
+
+model ApartmentBasicInfo {
+  kaptCode      String  @id
+  kaptName      String
+  bjdCode       String?
+  as1           String?
+  as2           String?
+  as3           String?
+  as4           String?
+  createdAt     DateTime @default(now())
+  
+  kaptAddr      String?
+  codeSaleNm    String?
+  codeHeatNm    String?
+  kaptTarea     Float?
+  kaptDongCnt   Int?
+  kaptdaCnt     String?
+  kaptBcompany  String?
+  kaptAcompany  String?
+  kaptTel       String?
+  kaptFax       String?
+  kaptUrl       String?
+  codeAptNm     String?
+  doroJuso      String?
+  hoCnt         Int?
+  codeMgrNm     String?
+  codeHallNm    String?
+  kaptUsedate   String?
+  kaptMarea     Float?
+  kaptMparea60  Float?
+  kaptMparea85  Float?
+  kaptMparea135 Float?
+  kaptMparea136 Float?
+  privArea      Float?
+  
+  kaptTopFloor  Int?
+  ktownFlrNo    Int?
+  kaptBaseFloor Int?
+  kaptdEcntp    Int?
+  zipcode       String?
+  
+  lat           Float?
+  lng           Float?
+
+  // ✅ 상세정보와 1:1
+  detailedInfo ApartmentDetailedInfo? @relation("BasicToDetail")
+
+  // ✅ 거래정보와 1:N
+  transactions ApartmentTransaction[] @relation("BasicToTransaction")
+
+  favorites Favorite[]
+  reports   Report[]
+}
+
+model ApartmentDetailedInfo {
+  kaptCode                String  @id
+  kaptName                String?
+  codeMgr                 String?
+  kaptMgrCnt              Int?
+  kaptCcompany            String?
+  codeSec                 String?
+  kaptdScnt               Int?
+  kaptdSecCom             String?
+  codeClean               String?
+  kaptdClcnt              Int?
+  codeGarbage             String?
+  codeDisinf              String?
+  kaptdDcnt               Int?
+  disposalType            String?
+  codeStr                 String?
+  kaptdEcapa              Int?
+  codeEcon                String?
+  codeEmgr                String?
+  codeFalarm              String?
+  codeWsupply             String?
+  codeElev                String?
+  kaptdEcnt               Int?
+  kaptdPcnt               Int?
+  kaptdPcntu              Int?
+  codeNet                 String?
+  kaptdCccnt              Int?
+  welfareFacility         String?
+  kaptdWtimebus           String?
+  subwayLine              String?
+  subwayStation           String?
+  kaptdWtimesub           String?
+  convenientFacility      String?
+  educationFacility       String?
+  groundElChargerCnt      Int?
+  undergroundElChargerCnt Int?
+
+  // ✅ 반대 관계에서 이름 맞춰줌
+  basicInfo ApartmentBasicInfo @relation("BasicToDetail", fields: [kaptCode], references: [kaptCode])
+}
+
+model ApartmentTransaction {
+  id             Int      @id @default(autoincrement())
+  kaptCode       String
+  dealType       String   // "매매" | "전세" | "월세"
+  saleAmount     Int?     // 매매가
+  depositAmount  Int?     // 전세 보증금 or 월세 보증금
+  monthlyAmount  Int?     // 월세
+  area           Float
+  dealYear       Int
+  dealMonth      Int
+  dealDay        Int
+  floor          Int
+  aptNm          String?
+  jibun          String?
+  buildYear      Int?
+
+  // 💡 여기에 relation 이름 추가!
+  basicInfo ApartmentBasicInfo @relation("BasicToTransaction", fields: [kaptCode], references: [kaptCode])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([kaptCode, dealYear, dealMonth, dealDay, floor, dealType])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+model Bookmark {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+model Point {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  reason    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Badge {
+  id          Int      @id @default(autoincrement())
+  badgeId     String   @unique
+  name        String
+  description String
+  imageUrl    String
+  users       User[]
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model PromotionPost {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String   @db.Text
+  imageUrl    String?
+  isFeatured  Boolean  @default(false)
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PostView {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  viewedAt  DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, viewedAt])
+}
+

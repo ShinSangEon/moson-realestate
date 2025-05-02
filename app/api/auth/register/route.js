@@ -135,7 +135,7 @@ export async function POST(request) {
           name,
           phoneNumber,
           profileImage: profileImage || "/default-profile.png",
-          role,
+          role: role.toUpperCase(),
         },
       });
 

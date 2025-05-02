@@ -1,0 +1,1454 @@
+[
+  {
+    "name": "진주빌라맨션",
+    "avgSale": 6800,
+    "avgRent": 12000,
+    "rentRate": 176.5
+  },
+  {
+    "name": "라미",
+    "avgSale": 4043,
+    "avgRent": 7000,
+    "rentRate": 173.1
+  },
+  {
+    "name": "순화가밀라씨티빌",
+    "avgSale": 3340,
+    "avgRent": 4720,
+    "rentRate": 141.3
+  },
+  {
+    "name": "대경강남타운",
+    "avgSale": 11752.63157894737,
+    "avgRent": 16428.57142857143,
+    "rentRate": 139.8
+  },
+  {
+    "name": "럭키강변",
+    "avgSale": 13021.875,
+    "avgRent": 16000,
+    "rentRate": 122.9
+  },
+  {
+    "name": "석류맨션",
+    "avgSale": 5725.555555555556,
+    "avgRent": 7000,
+    "rentRate": 122.3
+  },
+  {
+    "name": "국민3차",
+    "avgSale": 5840,
+    "avgRent": 7066.666666666667,
+    "rentRate": 121
+  },
+  {
+    "name": "대경",
+    "avgSale": 15692.1875,
+    "avgRent": 16765.90909090909,
+    "rentRate": 106.8
+  },
+  {
+    "name": "덕산",
+    "avgSale": 11718,
+    "avgRent": 12333.33333333333,
+    "rentRate": 105.3
+  },
+  {
+    "name": "한주맨션",
+    "avgSale": 8200,
+    "avgRent": 8500,
+    "rentRate": 103.7
+  },
+  {
+    "name": "경남빌라다동(240-0)",
+    "avgSale": 6155.555555555556,
+    "avgRent": 6000,
+    "rentRate": 97.5
+  },
+  {
+    "name": "한보타워(하대1차)",
+    "avgSale": 8213.529411764706,
+    "avgRent": 8000,
+    "rentRate": 97.4
+  },
+  {
+    "name": "신안국제맨션",
+    "avgSale": 4391.666666666667,
+    "avgRent": 4250,
+    "rentRate": 96.8
+  },
+  {
+    "name": "대화강변마을",
+    "avgSale": 13483.33333333333,
+    "avgRent": 13000,
+    "rentRate": 96.4
+  },
+  {
+    "name": "새진주맨션",
+    "avgSale": 8430,
+    "avgRent": 8000,
+    "rentRate": 94.9
+  },
+  {
+    "name": "하영무지개맨션",
+    "avgSale": 10613.88888888889,
+    "avgRent": 10000,
+    "rentRate": 94.2
+  },
+  {
+    "name": "신안주공2",
+    "avgSale": 14215.10791366906,
+    "avgRent": 13343.16379310345,
+    "rentRate": 93.9
+  },
+  {
+    "name": "하영그린맨션",
+    "avgSale": 10186.36363636364,
+    "avgRent": 9533.333333333334,
+    "rentRate": 93.6
+  },
+  {
+    "name": "화인",
+    "avgSale": 9187.512195121952,
+    "avgRent": 8540,
+    "rentRate": 93
+  },
+  {
+    "name": "한보",
+    "avgSale": 12438.09523809524,
+    "avgRent": 11550,
+    "rentRate": 92.9
+  },
+  {
+    "name": "삼호그린맨션",
+    "avgSale": 12724,
+    "avgRent": 11666.66666666667,
+    "rentRate": 91.7
+  },
+  {
+    "name": "칠암대덕",
+    "avgSale": 13743.75,
+    "avgRent": 12600,
+    "rentRate": 91.7
+  },
+  {
+    "name": "신안주공3",
+    "avgSale": 15516.34831460674,
+    "avgRent": 14078.93258426966,
+    "rentRate": 90.7
+  },
+  {
+    "name": "에스디푸른마을",
+    "avgSale": 16630,
+    "avgRent": 15000,
+    "rentRate": 90.2
+  },
+  {
+    "name": "일동",
+    "avgSale": 11067.74193548387,
+    "avgRent": 9916.666666666666,
+    "rentRate": 89.6
+  },
+  {
+    "name": "금산흥한골든빌",
+    "avgSale": 10567.65517241379,
+    "avgRent": 9460.833333333334,
+    "rentRate": 89.5
+  },
+  {
+    "name": "아르피오빌",
+    "avgSale": 8700,
+    "avgRent": 7750,
+    "rentRate": 89.1
+  },
+  {
+    "name": "상평국민1차",
+    "avgSale": 5440,
+    "avgRent": 4833.333333333333,
+    "rentRate": 88.8
+  },
+  {
+    "name": "칠암한주타운",
+    "avgSale": 17529.16666666667,
+    "avgRent": 15500,
+    "rentRate": 88.4
+  },
+  {
+    "name": "대화리네르빌",
+    "avgSale": 20981.25,
+    "avgRent": 18500,
+    "rentRate": 88.2
+  },
+  {
+    "name": "삼성",
+    "avgSale": 17494.44444444445,
+    "avgRent": 15407.14285714286,
+    "rentRate": 88.1
+  },
+  {
+    "name": "흥한타운2",
+    "avgSale": 15497.6,
+    "avgRent": 13635.83333333333,
+    "rentRate": 88
+  },
+  {
+    "name": "동국강변타워1",
+    "avgSale": 9300,
+    "avgRent": 8166.666666666667,
+    "rentRate": 87.8
+  },
+  {
+    "name": "한보힐타워",
+    "avgSale": 8442.857142857143,
+    "avgRent": 7392.5,
+    "rentRate": 87.6
+  },
+  {
+    "name": "동성가든타워",
+    "avgSale": 11260.86956521739,
+    "avgRent": 9857.142857142857,
+    "rentRate": 87.5
+  },
+  {
+    "name": "들말대경",
+    "avgSale": 22359.75609756097,
+    "avgRent": 19521,
+    "rentRate": 87.3
+  },
+  {
+    "name": "한보타운",
+    "avgSale": 12095.25423728814,
+    "avgRent": 10516.66666666667,
+    "rentRate": 86.9
+  },
+  {
+    "name": "평거주공1차",
+    "avgSale": 10958.82352941176,
+    "avgRent": 9499.590163934427,
+    "rentRate": 86.7
+  },
+  {
+    "name": "동신",
+    "avgSale": 7693.733333333334,
+    "avgRent": 6666.666666666667,
+    "rentRate": 86.7
+  },
+  {
+    "name": "태완노블리안",
+    "avgSale": 6944.444444444444,
+    "avgRent": 6000,
+    "rentRate": 86.4
+  },
+  {
+    "name": "건영아모리움",
+    "avgSale": 30317.85714285714,
+    "avgRent": 26166,
+    "rentRate": 86.3
+  },
+  {
+    "name": "한주파크맨션",
+    "avgSale": 12757.14285714286,
+    "avgRent": 11000,
+    "rentRate": 86.2
+  },
+  {
+    "name": "대영",
+    "avgSale": 12895.65217391304,
+    "avgRent": 11100,
+    "rentRate": 86.1
+  },
+  {
+    "name": "진주푸르지오2단지",
+    "avgSale": 24909.61538461538,
+    "avgRent": 21444.44444444445,
+    "rentRate": 86.1
+  },
+  {
+    "name": "삼전",
+    "avgSale": 8150,
+    "avgRent": 7000,
+    "rentRate": 85.9
+  },
+  {
+    "name": "신안주공1",
+    "avgSale": 25060.65555555556,
+    "avgRent": 21463.41463414634,
+    "rentRate": 85.6
+  },
+  {
+    "name": "주공그린빌",
+    "avgSale": 19319.33070866142,
+    "avgRent": 16490.83333333333,
+    "rentRate": 85.4
+  },
+  {
+    "name": "가좌주공2차",
+    "avgSale": 12552.63157894737,
+    "avgRent": 10720.90909090909,
+    "rentRate": 85.4
+  },
+  {
+    "name": "한보타워",
+    "avgSale": 14079.16666666667,
+    "avgRent": 12000,
+    "rentRate": 85.2
+  },
+  {
+    "name": "진주푸르지오1단지",
+    "avgSale": 22198.71794871795,
+    "avgRent": 18735.71428571429,
+    "rentRate": 84.4
+  },
+  {
+    "name": "혁신도시엘에이치아파트8단지",
+    "avgSale": 29587.83783783784,
+    "avgRent": 24900.86805555555,
+    "rentRate": 84.2
+  },
+  {
+    "name": "가좌주공1차",
+    "avgSale": 13811.59722222222,
+    "avgRent": 11602.90513833992,
+    "rentRate": 84
+  },
+  {
+    "name": "금산느티나무",
+    "avgSale": 14891.66666666667,
+    "avgRent": 12509.33333333333,
+    "rentRate": 84
+  },
+  {
+    "name": "금산아이파크",
+    "avgSale": 20707.83132530121,
+    "avgRent": 17368.94736842105,
+    "rentRate": 83.9
+  },
+  {
+    "name": "이현하이클래스웰가",
+    "avgSale": 32323.85185185185,
+    "avgRent": 27096.55172413793,
+    "rentRate": 83.8
+  },
+  {
+    "name": "진흥더루벤스",
+    "avgSale": 23200,
+    "avgRent": 19370,
+    "rentRate": 83.5
+  },
+  {
+    "name": "진주초전푸르지오1단지",
+    "avgSale": 43034.78260869566,
+    "avgRent": 35918.75,
+    "rentRate": 83.5
+  },
+  {
+    "name": "대림",
+    "avgSale": 13387.93103448276,
+    "avgRent": 11169.23076923077,
+    "rentRate": 83.4
+  },
+  {
+    "name": "남강휴먼빌",
+    "avgSale": 35038.5,
+    "avgRent": 29200,
+    "rentRate": 83.3
+  },
+  {
+    "name": "대경아르떼빌",
+    "avgSale": 10885.71428571429,
+    "avgRent": 9027.34375,
+    "rentRate": 82.9
+  },
+  {
+    "name": "금산e편한세상",
+    "avgSale": 25461.86440677966,
+    "avgRent": 21055.55555555555,
+    "rentRate": 82.7
+  },
+  {
+    "name": "동일스위트",
+    "avgSale": 25116.15384615385,
+    "avgRent": 20766.66666666667,
+    "rentRate": 82.7
+  },
+  {
+    "name": "대동디지털황토",
+    "avgSale": 24228.18181818182,
+    "avgRent": 20033.33333333333,
+    "rentRate": 82.7
+  },
+  {
+    "name": "평거휴먼시아4단지",
+    "avgSale": 32600.61728395062,
+    "avgRent": 26883.52941176471,
+    "rentRate": 82.5
+  },
+  {
+    "name": "진주초장엠코타운더이스턴파크",
+    "avgSale": 34008.10126582278,
+    "avgRent": 27918.76288659794,
+    "rentRate": 82.1
+  },
+  {
+    "name": "혁신도시엘에이치아파트9단지",
+    "avgSale": 31369.45054945055,
+    "avgRent": 25715.57534246575,
+    "rentRate": 82
+  },
+  {
+    "name": "들말흥한타운",
+    "avgSale": 25725.76923076923,
+    "avgRent": 21068.61111111111,
+    "rentRate": 81.9
+  },
+  {
+    "name": "현대",
+    "avgSale": 18746.69979716024,
+    "avgRent": 15314.27184466019,
+    "rentRate": 81.7
+  },
+  {
+    "name": "평거휴먼시아3단지",
+    "avgSale": 38067.74193548387,
+    "avgRent": 30894.11764705883,
+    "rentRate": 81.2
+  },
+  {
+    "name": "진주조합주택",
+    "avgSale": 4925,
+    "avgRent": 4000,
+    "rentRate": 81.2
+  },
+  {
+    "name": "미르젠",
+    "avgSale": 12673.68421052631,
+    "avgRent": 10278.57142857143,
+    "rentRate": 81.1
+  },
+  {
+    "name": "휴앤인엘리시움",
+    "avgSale": 40642.59259259259,
+    "avgRent": 32914.51612903226,
+    "rentRate": 81
+  },
+  {
+    "name": "순화스타씨티",
+    "avgSale": 18566.66666666667,
+    "avgRent": 15000,
+    "rentRate": 80.8
+  },
+  {
+    "name": "들말한보타운",
+    "avgSale": 23579.91379310345,
+    "avgRent": 19029.58536585366,
+    "rentRate": 80.7
+  },
+  {
+    "name": "한보은빛마을",
+    "avgSale": 27521.9696969697,
+    "avgRent": 22214.28571428571,
+    "rentRate": 80.7
+  },
+  {
+    "name": "청구타운",
+    "avgSale": 16958.77192982456,
+    "avgRent": 13640.83333333333,
+    "rentRate": 80.4
+  },
+  {
+    "name": "혁신도시엘에이치5단지",
+    "avgSale": 35738.26086956522,
+    "avgRent": 28685.38461538462,
+    "rentRate": 80.3
+  },
+  {
+    "name": "그린타운",
+    "avgSale": 10584.28571428571,
+    "avgRent": 8500,
+    "rentRate": 80.3
+  },
+  {
+    "name": "신익무지개",
+    "avgSale": 5977.777777777777,
+    "avgRent": 4800,
+    "rentRate": 80.3
+  },
+  {
+    "name": "진주강남동일동미라주",
+    "avgSale": 36984.23913043478,
+    "avgRent": 29678.40909090909,
+    "rentRate": 80.2
+  },
+  {
+    "name": "진주초전푸르지오2단지",
+    "avgSale": 45067.27272727273,
+    "avgRent": 36101.78571428572,
+    "rentRate": 80.1
+  },
+  {
+    "name": "초전해모로루비채4단지",
+    "avgSale": 36704.56,
+    "avgRent": 29186.27450980392,
+    "rentRate": 79.5
+  },
+  {
+    "name": "두산위브",
+    "avgSale": 24277.4647887324,
+    "avgRent": 19280,
+    "rentRate": 79.4
+  },
+  {
+    "name": "진주혁신코오롱하늘채",
+    "avgSale": 37230.17204301075,
+    "avgRent": 29500.55147058823,
+    "rentRate": 79.2
+  },
+  {
+    "name": "한주럭키타운",
+    "avgSale": 23521.33333333333,
+    "avgRent": 18599.30555555555,
+    "rentRate": 79.1
+  },
+  {
+    "name": "더퀸즈웰가",
+    "avgSale": 38364.79820627803,
+    "avgRent": 30205.06993006993,
+    "rentRate": 78.7
+  },
+  {
+    "name": "상봉2",
+    "avgSale": 8736.842105263158,
+    "avgRent": 6875,
+    "rentRate": 78.7
+  },
+  {
+    "name": "더샵진주피에르테",
+    "avgSale": 48700,
+    "avgRent": 38300,
+    "rentRate": 78.6
+  },
+  {
+    "name": "진주평거우방아이유쉘스카이팰리스",
+    "avgSale": 42772.61904761905,
+    "avgRent": 33544.44444444445,
+    "rentRate": 78.4
+  },
+  {
+    "name": "흥한타운",
+    "avgSale": 12125,
+    "avgRent": 9500,
+    "rentRate": 78.4
+  },
+  {
+    "name": "진주센트럴자이",
+    "avgSale": 34687.80487804878,
+    "avgRent": 27191.66666666667,
+    "rentRate": 78.4
+  },
+  {
+    "name": "하영파크",
+    "avgSale": 6375,
+    "avgRent": 5000,
+    "rentRate": 78.4
+  },
+  {
+    "name": "금호맨션",
+    "avgSale": 6400,
+    "avgRent": 5000,
+    "rentRate": 78.1
+  },
+  {
+    "name": "진주우방아이유쉘",
+    "avgSale": 31202.77777777778,
+    "avgRent": 24293.27868852459,
+    "rentRate": 77.9
+  },
+  {
+    "name": "초전해모로루비채2단지",
+    "avgSale": 35031.12244897959,
+    "avgRent": 27297.91666666667,
+    "rentRate": 77.9
+  },
+  {
+    "name": "금호석류",
+    "avgSale": 27900.92592592593,
+    "avgRent": 21742.10526315789,
+    "rentRate": 77.9
+  },
+  {
+    "name": "남강카누빌2",
+    "avgSale": 13750,
+    "avgRent": 10700,
+    "rentRate": 77.8
+  },
+  {
+    "name": "일진스위트포레강남",
+    "avgSale": 31350,
+    "avgRent": 24327.77777777778,
+    "rentRate": 77.6
+  },
+  {
+    "name": "진주문산파란채",
+    "avgSale": 21353.58928571429,
+    "avgRent": 16566.66666666667,
+    "rentRate": 77.6
+  },
+  {
+    "name": "한주타운",
+    "avgSale": 18130.95238095238,
+    "avgRent": 14000,
+    "rentRate": 77.2
+  },
+  {
+    "name": "현대성우트리팰리스",
+    "avgSale": 27496.15384615385,
+    "avgRent": 21202.77777777778,
+    "rentRate": 77.1
+  },
+  {
+    "name": "벽산블루밍(구)동신",
+    "avgSale": 10211.76470588235,
+    "avgRent": 7840,
+    "rentRate": 76.8
+  },
+  {
+    "name": "대화파크맨션",
+    "avgSale": 7816.666666666667,
+    "avgRent": 6000,
+    "rentRate": 76.8
+  },
+  {
+    "name": "대동",
+    "avgSale": 6560,
+    "avgRent": 5025,
+    "rentRate": 76.6
+  },
+  {
+    "name": "한보하이타운",
+    "avgSale": 13326.66666666667,
+    "avgRent": 10200,
+    "rentRate": 76.5
+  },
+  {
+    "name": "진주혁신도시센텀리버파크",
+    "avgSale": 38643.28244274809,
+    "avgRent": 29579.33333333333,
+    "rentRate": 76.5
+  },
+  {
+    "name": "현대금빛마을",
+    "avgSale": 9590.833333333334,
+    "avgRent": 7315.789473684211,
+    "rentRate": 76.3
+  },
+  {
+    "name": "촉석맨션",
+    "avgSale": 10070,
+    "avgRent": 7675,
+    "rentRate": 76.2
+  },
+  {
+    "name": "이지더원",
+    "avgSale": 43830,
+    "avgRent": 33005.33333333334,
+    "rentRate": 75.3
+  },
+  {
+    "name": "한림풀에버",
+    "avgSale": 40714.46078431373,
+    "avgRent": 30668.48571428571,
+    "rentRate": 75.3
+  },
+  {
+    "name": "평거하우스토리",
+    "avgSale": 47441.66666666666,
+    "avgRent": 35625,
+    "rentRate": 75.1
+  },
+  {
+    "name": "진주문산코아루",
+    "avgSale": 30611.80555555555,
+    "avgRent": 22908.33333333333,
+    "rentRate": 74.8
+  },
+  {
+    "name": "진주정촌대경파미르",
+    "avgSale": 30336.18357487923,
+    "avgRent": 22695.3,
+    "rentRate": 74.8
+  },
+  {
+    "name": "한보(하대3차)",
+    "avgSale": 11103.0303030303,
+    "avgRent": 8300,
+    "rentRate": 74.8
+  },
+  {
+    "name": "진주혁신도시라온프라이빗아파트",
+    "avgSale": 48034.33734939759,
+    "avgRent": 35759.90990990991,
+    "rentRate": 74.4
+  },
+  {
+    "name": "진주평거엘크루",
+    "avgSale": 48263.72549019608,
+    "avgRent": 35796.42857142857,
+    "rentRate": 74.2
+  },
+  {
+    "name": "진주혁신도시중흥에스-클래스센트럴시티4단지",
+    "avgSale": 53290.72164948453,
+    "avgRent": 39421.26436781609,
+    "rentRate": 74
+  },
+  {
+    "name": "고려",
+    "avgSale": 6081.818181818182,
+    "avgRent": 4500,
+    "rentRate": 74
+  },
+  {
+    "name": "평거현대2",
+    "avgSale": 21021.05263157895,
+    "avgRent": 15500,
+    "rentRate": 73.7
+  },
+  {
+    "name": "대경그린파크",
+    "avgSale": 11237.5,
+    "avgRent": 8250,
+    "rentRate": 73.4
+  },
+  {
+    "name": "초전흥한",
+    "avgSale": 20490.21739130435,
+    "avgRent": 15000,
+    "rentRate": 73.2
+  },
+  {
+    "name": "가호에일린의뜰",
+    "avgSale": 38915.27777777778,
+    "avgRent": 28355.55555555555,
+    "rentRate": 72.9
+  },
+  {
+    "name": "한주한보",
+    "avgSale": 14710.52631578947,
+    "avgRent": 10700,
+    "rentRate": 72.7
+  },
+  {
+    "name": "진주혁신도시중흥에스-클래스센트럴시티3단지",
+    "avgSale": 54202.14285714286,
+    "avgRent": 39295.08196721312,
+    "rentRate": 72.5
+  },
+  {
+    "name": "엠코타운더프라하",
+    "avgSale": 50063.39055793991,
+    "avgRent": 36302.95774647887,
+    "rentRate": 72.5
+  },
+  {
+    "name": "제일풍경채",
+    "avgSale": 43593.54838709677,
+    "avgRent": 31400,
+    "rentRate": 72
+  },
+  {
+    "name": "평거현대1",
+    "avgSale": 18102.62295081967,
+    "avgRent": 13018.18181818182,
+    "rentRate": 71.9
+  },
+  {
+    "name": "하대주공",
+    "avgSale": 9081.25,
+    "avgRent": 6514.084507042254,
+    "rentRate": 71.7
+  },
+  {
+    "name": "원정로얄팰리스",
+    "avgSale": 26560,
+    "avgRent": 19000,
+    "rentRate": 71.5
+  },
+  {
+    "name": "망경한보타운",
+    "avgSale": 14451.80722891566,
+    "avgRent": 10257.14285714286,
+    "rentRate": 71
+  },
+  {
+    "name": "상대한보타운",
+    "avgSale": 20704.92753623188,
+    "avgRent": 14550,
+    "rentRate": 70.3
+  },
+  {
+    "name": "힐스테이트초전",
+    "avgSale": 44679.83333333334,
+    "avgRent": 31379.312,
+    "rentRate": 70.2
+  },
+  {
+    "name": "진주혁신도시중흥에스-클래스센트럴시티2단지",
+    "avgSale": 62932.58426966292,
+    "avgRent": 43994,
+    "rentRate": 69.9
+  },
+  {
+    "name": "진주혁신도시중흥에스-클래스더프라임",
+    "avgSale": 54853.55670103093,
+    "avgRent": 37885.96385542169,
+    "rentRate": 69.1
+  },
+  {
+    "name": "진주혁신도시대방노블랜드더캐슬아파트",
+    "avgSale": 64082.46753246753,
+    "avgRent": 43880.06535947712,
+    "rentRate": 68.5
+  },
+  {
+    "name": "스카이시티프라디움",
+    "avgSale": 48074.18811881188,
+    "avgRent": 32498.4,
+    "rentRate": 67.6
+  },
+  {
+    "name": "포레나신진주",
+    "avgSale": 46761.66666666666,
+    "avgRent": 31571.62162162162,
+    "rentRate": 67.5
+  },
+  {
+    "name": "상평동신",
+    "avgSale": 7404.545454545455,
+    "avgRent": 5000,
+    "rentRate": 67.5
+  },
+  {
+    "name": "일신",
+    "avgSale": 14403.57142857143,
+    "avgRent": 9666.666666666666,
+    "rentRate": 67.1
+  },
+  {
+    "name": "센트렐웰가",
+    "avgSale": 46275.54347826087,
+    "avgRent": 30992.95774647887,
+    "rentRate": 67
+  },
+  {
+    "name": "국민주택",
+    "avgSale": 4498.333333333333,
+    "avgRent": 3000,
+    "rentRate": 66.7
+  },
+  {
+    "name": "진주혁신도시중흥에스-클래스더퍼스트",
+    "avgSale": 72397.4074074074,
+    "avgRent": 47963,
+    "rentRate": 66.2
+  },
+  {
+    "name": "신진주역세권우미린더시그니처",
+    "avgSale": 52949.6,
+    "avgRent": 34135.03649635037,
+    "rentRate": 64.5
+  },
+  {
+    "name": "대주엘리시안",
+    "avgSale": 12414.28571428571,
+    "avgRent": 8000,
+    "rentRate": 64.4
+  },
+  {
+    "name": "삼환나우빌",
+    "avgSale": 54395,
+    "avgRent": 35000,
+    "rentRate": 64.3
+  },
+  {
+    "name": "동국한양빌라",
+    "avgSale": 7888.888888888889,
+    "avgRent": 5000,
+    "rentRate": 63.4
+  },
+  {
+    "name": "시티프라디움",
+    "avgSale": 46491.30434782609,
+    "avgRent": 29340,
+    "rentRate": 63.1
+  },
+  {
+    "name": "흥한타운1",
+    "avgSale": 21030.95238095238,
+    "avgRent": 13016.66666666667,
+    "rentRate": 61.9
+  },
+  {
+    "name": "상대주공",
+    "avgSale": 7720.3125,
+    "avgRent": 4746.428571428572,
+    "rentRate": 61.5
+  },
+  {
+    "name": "국화",
+    "avgSale": 5400,
+    "avgRent": 3300,
+    "rentRate": 61.1
+  },
+  {
+    "name": "신진주라비에데시앙",
+    "avgSale": 52799,
+    "avgRent": 31520.21276595745,
+    "rentRate": 59.7
+  },
+  {
+    "name": "이화맨션",
+    "avgSale": 8980,
+    "avgRent": 5000,
+    "rentRate": 55.7
+  },
+  {
+    "name": "화광비발디",
+    "avgSale": 18440,
+    "avgRent": 10000,
+    "rentRate": 54.2
+  },
+  {
+    "name": "상대한주그린",
+    "avgSale": 13012.5,
+    "avgRent": 7000,
+    "rentRate": 53.8
+  },
+  {
+    "name": "우신파크맨션",
+    "avgSale": 10714.28571428571,
+    "avgRent": 5700,
+    "rentRate": 53.2
+  },
+  {
+    "name": "동국강변타워2",
+    "avgSale": 10192.30769230769,
+    "avgRent": 5300,
+    "rentRate": 52
+  },
+  {
+    "name": "도동대림",
+    "avgSale": 16271.25,
+    "avgRent": 8000,
+    "rentRate": 49.2
+  },
+  {
+    "name": "대림맨션",
+    "avgSale": 11631.81818181818,
+    "avgRent": 5500,
+    "rentRate": 47.3
+  },
+  {
+    "name": "상봉1",
+    "avgSale": 7567.428571428572,
+    "avgRent": 3205.555555555556,
+    "rentRate": 42.4
+  },
+  {
+    "name": "이현주공",
+    "avgSale": 13258.53658536585,
+    "avgRent": 5425,
+    "rentRate": 40.9
+  },
+  {
+    "name": "경남빌라",
+    "avgSale": 22000,
+    "avgRent": 6600,
+    "rentRate": 30
+  },
+  {
+    "name": "(신안)대림맨션",
+    "avgSale": 9200,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "건우",
+    "avgSale": 5550,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "건일",
+    "avgSale": 6031.818181818182,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "견성스타뷰",
+    "avgSale": 19500,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "경남맨션",
+    "avgSale": 11200,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "경남빌라가동(239-6)",
+    "avgSale": 7000,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "경남빌라나동(238-2)",
+    "avgSale": 6716.666666666667,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "경남주택금산7차",
+    "avgSale": 8400,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "고려맨션",
+    "avgSale": 7360,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "국민2",
+    "avgSale": 5920,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "금광팰리스",
+    "avgSale": 17175,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "남강카누빌1",
+    "avgSale": 15380,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "남강한주",
+    "avgSale": 15237.5,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "뉴월드행복마을",
+    "avgSale": 14800,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "대경강변맨션",
+    "avgSale": 13250,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "대곡한양",
+    "avgSale": 7825,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "대산빌리지",
+    "avgSale": 4100,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "대성주택조합",
+    "avgSale": 9425,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "대흥빌라",
+    "avgSale": 9050,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "도동대림빌라",
+    "avgSale": 19766.66666666667,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "도운",
+    "avgSale": 6281.25,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "동명",
+    "avgSale": 17350,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "동서훼밀리",
+    "avgSale": 7340.909090909091,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "동신3동",
+    "avgSale": 7700,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "동진빌라",
+    "avgSale": 12000,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "동진주맨션",
+    "avgSale": 9200,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "로얄맨션",
+    "avgSale": 9875,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "메이힐스",
+    "avgSale": 27575,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "명석블리시움",
+    "avgSale": 16288.88888888889,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "모란",
+    "avgSale": 6125,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "문산한양하이빌",
+    "avgSale": 13055.55555555555,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼영",
+    "avgSale": 10700,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼우빌라",
+    "avgSale": 11250,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼전2차",
+    "avgSale": 9850,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼전3",
+    "avgSale": 9807.142857142857,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼전빌라",
+    "avgSale": 11100,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼전프라자",
+    "avgSale": 12846.42857142857,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼호가든맨션",
+    "avgSale": 9290,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "삼호맨션",
+    "avgSale": 9135.714285714286,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "상대진주(나동)",
+    "avgSale": 9800,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "서성파라토피아",
+    "avgSale": 15078.57142857143,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "성창조합주택",
+    "avgSale": 8433.333333333334,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "송학맨션",
+    "avgSale": 13066.66666666667,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "순화천사의마을",
+    "avgSale": 14962.5,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "시영",
+    "avgSale": 3300,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "신안원정그린빌",
+    "avgSale": 15316.66666666667,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "신안진주맨션",
+    "avgSale": 9200,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "신우파크빌",
+    "avgSale": 21550,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "쌍용",
+    "avgSale": 14833.33333333333,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "영남맨션",
+    "avgSale": 10270,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "올림피아골든맨션",
+    "avgSale": 15975,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "원정자우림",
+    "avgSale": 20500,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "월드트레비앙",
+    "avgSale": 19750,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "월산아크로빌",
+    "avgSale": 10183.33333333333,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "유신",
+    "avgSale": 7950,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "이현진주그린빌라",
+    "avgSale": 9200,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "이현한주맨션",
+    "avgSale": 8931.25,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "일반성에이원",
+    "avgSale": 9954.166666666666,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "임광",
+    "avgSale": 9390.90909090909,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "자성빌라트",
+    "avgSale": 8236.666666666666,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "조선빌라",
+    "avgSale": 14200,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "주안빌라",
+    "avgSale": 11000,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "진주(가동)",
+    "avgSale": 7600,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "진주롯데인벤스",
+    "avgSale": 36800,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "진주정촌올리움",
+    "avgSale": "",
+    "avgRent": 1960,
+    "rentRate": ""
+  },
+  {
+    "name": "진주포레스트부영",
+    "avgSale": "",
+    "avgRent": 17163.9605734767,
+    "rentRate": ""
+  },
+  {
+    "name": "평거대화리네르빌",
+    "avgSale": 18795.45454545454,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "프리미어웰가",
+    "avgSale": "",
+    "avgRent": 18061.74334140436,
+    "rentRate": ""
+  },
+  {
+    "name": "하대한양",
+    "avgSale": 5300,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "하대흥한골든빌",
+    "avgSale": 14400,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "한등하이츠빌라",
+    "avgSale": 21400,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "한성빌라",
+    "avgSale": 9750,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "한양",
+    "avgSale": 10716.66666666667,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "한주",
+    "avgSale": 8275,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "허브플러스빌",
+    "avgSale": 15000,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "혁신도시엘에이치아파트3단지",
+    "avgSale": "",
+    "avgRent": 2473,
+    "rentRate": ""
+  },
+  {
+    "name": "현대(봉곡맨션)",
+    "avgSale": 8750,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "화진그린맨션",
+    "avgSale": 7283.333333333333,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "흥한",
+    "avgSale": 8832.857142857143,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "흥한빌라",
+    "avgSale": 10500,
+    "avgRent": "",
+    "rentRate": ""
+  },
+  {
+    "name": "흥한스위트",
+    "avgSale": 13880,
+    "avgRent": "",
+    "rentRate": ""
+  }
+]

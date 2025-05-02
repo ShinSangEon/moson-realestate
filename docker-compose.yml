@@ -7,11 +7,11 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: vacancy
+      MYSQL_DATABASE: real_estate
     ports:
       - "3308:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - moson-realestate-main_mysql_data:/var/lib/mysql
     networks:
       - nextjs_network
 
@@ -27,8 +27,9 @@ services:
       - nextjs_network
 
 volumes:
-  mysql_data:
-  redis_data:
+  moson-realestate-main_mysql_data:
+    external: true
+  redis_data: # 👉 새로 자동 생성될 내부 볼륨
 
 networks:
   nextjs_network:

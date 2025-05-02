@@ -3,7 +3,16 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { ImagePlus, PencilLine, UploadCloud } from "lucide-react";
+import {
+  ImagePlus,
+  PencilLine,
+  UploadCloud,
+  Home,
+  Scale,
+  Building2,
+  MessageSquare,
+  UserCheck,
+} from "lucide-react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
@@ -11,8 +20,55 @@ export default function CommunityWritePage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [category, setCategory] = useState("매물 질문");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  const categories = [
+    {
+      id: "매물 질문",
+      icon: <Home className="w-4 h-4" />,
+      color: "green",
+    },
+    {
+      id: "계약/법률",
+      icon: <Scale className="w-4 h-4" />,
+      color: "purple",
+    },
+    {
+      id: "신축/분양",
+      icon: <Building2 className="w-4 h-4" />,
+      color: "orange",
+    },
+    {
+      id: "동네 이야기",
+      icon: <MessageSquare className="w-4 h-4" />,
+      color: "yellow",
+    },
+    {
+      id: "공인중개사에게 묻기",
+      icon: <UserCheck className="w-4 h-4" />,
+      color: "blue",
+      description: "공인중개사에게 질문하고 답변을 받아보세요",
+    },
+  ];
+
+  const getCategoryStyle = (cat) => {
+    switch (cat.color) {
+      case "green":
+        return "bg-green-100 text-green-600";
+      case "blue":
+        return "bg-blue-100 text-blue-600";
+      case "purple":
+        return "bg-purple-100 text-purple-600";
+      case "orange":
+        return "bg-orange-100 text-orange-600";
+      case "yellow":
+        return "bg-yellow-100 text-yellow-600";
+      default:
+        return "bg-gray-200 text-gray-600";
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -55,7 +111,7 @@ export default function CommunityWritePage() {
           title,
           content,
           imageUrl: "", // 이미지 업로드 기능 미구현
-          category: "잡담",
+          category,
           authorId: authData.user.id,
         }),
       });
@@ -98,6 +154,29 @@ export default function CommunityWritePage() {
           <br />
           진주 부동산과 관련된 이야기를 자유롭게 남겨주세요.
         </p>
+      </div>
+
+      {/* 카테고리 선택 */}
+      <div className="space-y-2">
+        <label className="text-gray-700 font-medium">카테고리 선택</label>
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setCategory(cat.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition ${
+                category === cat.id
+                  ? `${getCategoryStyle(cat)
+                      .replace("100", "500")
+                      .replace("600", "white")}`
+                  : `${getCategoryStyle(cat)} hover:opacity-80`
+              }`}
+            >
+              {cat.icon}
+              {cat.id}
+            </button>
+          ))}
+        </div>
       </div>
 
       <input
